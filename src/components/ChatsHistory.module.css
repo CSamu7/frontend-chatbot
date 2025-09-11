@@ -1,0 +1,12 @@
+.pastConversations {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #5398be;
+  width: 275px;
+  padding: 10px;
+}
+
+.title {
+  margin: 0;
+}

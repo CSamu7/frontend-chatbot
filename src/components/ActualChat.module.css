@@ -1,0 +1,24 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.chat {
+  flex: 1;
+}
+
+.formAsk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.formInput {
+  width: 60%;
+  padding: 20px;
+  font-size: 1.2rem;
+  border: 10px 10px;
+  border-color: white;
+}
