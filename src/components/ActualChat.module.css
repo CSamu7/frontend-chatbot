@@ -1,6 +1,7 @@
 .chatContainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
 }
 
@@ -9,16 +10,28 @@
 }
 
 .formAsk {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  width: 60%;
 }
 
 .formInput {
-  width: 60%;
+  width: clamp(600px, 60vw, 1200px);
   padding: 20px;
   font-size: 1.2rem;
   border: 10px 10px;
   border-color: white;
+  padding-right: 50px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  resize: none;
+}
+
+.sendMsg {
+  position: absolute;
+  cursor: pointer;
+  right: 30px;
 }

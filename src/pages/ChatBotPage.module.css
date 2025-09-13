@@ -2,3 +2,12 @@
   display: flex;
   flex: 1;
 }
+
+.header {
+  background-color: #f1d7be;
+  padding: 2rem 2rem;
+  height: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
