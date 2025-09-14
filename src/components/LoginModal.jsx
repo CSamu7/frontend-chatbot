@@ -1,8 +1,9 @@
+import { useState } from "react";
 import useUser from "../hooks/useUser";
 import styles from "./LoginModal.module.css";
 
-export default function LoginModal({ isActive, onClose }) {
-  const { user, login } = useUser();
+export default function LoginModal({ closeModal, isActive }) {
+  const { user, error, login } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +30,7 @@ export default function LoginModal({ isActive, onClose }) {
             <input type="password" name="password" required />
           </div>
           <a>¿No estas registrado?</a>
+          {error && <p>{error}</p>}
           <input type="submit" value="Iniciar sesión" />
         </form>
       </div>

@@ -1,30 +1,23 @@
 import { useState } from "react";
+import userServices from "../services/userServices";
 
 export default function useUser() {
   const [user, setUser] = useState({});
+  const [error, setError] = useState(null);
+  const { loginService } = userServices();
 
   const login = async (email, password) => {
+    setError(null);
+
     try {
-      const request = await fetch(import.meta.env.VITE_TOKEN_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+      const response = await loginService(email, password);
 
-      if (!request.ok) throw new Error("Fallo");
-
+      document.cookie = `token=${response.token}`;
+    } catch (request) {
       const response = await request.json();
-
-      return response;
-    } catch (error) {
-      console.log(error);
+      setError(response.detail);
     }
   };
 
-  return { user, login };
+  return { user, error, login };
 }
