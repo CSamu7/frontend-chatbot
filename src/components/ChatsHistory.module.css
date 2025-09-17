@@ -1,12 +1,53 @@
 .pastConversations {
+  grid-area: history;
   display: flex;
   flex-direction: column;
-
-  background-color: #5398be;
-  width: 275px;
-  padding: 10px;
+  background-color: #f7f3ed;
+  width: 100%;
+  padding: 1rem;
+  border-right: 1px solid #ccc;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .title {
+  margin: 0 0 1rem 0;
+  color: #000;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.pastConversations > div {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pastConversations > div:hover {
+  background-color: #ddd;
+}
+
+.pastConversations h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  color: #000;
+}
+
+.pastConversations p {
   margin: 0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .pastConversations {
+    border-right: none;
+    border-top: 1px solid #ccc;
+    height: auto;
+    max-height: 200px;
+  }
 }

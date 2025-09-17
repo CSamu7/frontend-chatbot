@@ -1,6 +1,9 @@
 .menuList {
   display: flex;
   align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
 .menuItem {
@@ -17,5 +20,10 @@
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
-  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.menuLink:hover {
+  background-color: #555;
+  transform: translateY(-2px);
 }

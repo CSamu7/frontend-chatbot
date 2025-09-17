@@ -1,7 +1,7 @@
 import useUser from "../hooks/useUser";
 import styles from "./LoginModal.module.css";
 
-export default function LoginModal({ isActive }) {
+export default function LoginModal({ isActive, onClose }) {
   const { user, login } = useUser();
 
   const handleSubmit = async (e) => {
@@ -13,21 +13,25 @@ export default function LoginModal({ isActive }) {
     await login(email, password);
   };
 
+  if (!isActive) return null;
+
   return (
-    <dialog className={styles.modal} method="dialog" open={isActive}>
-      <h2>Inicia sesión</h2>
-      <form id="form" onSubmit={handleSubmit}>
-        <div>
-          <label>Correo electronico</label>
-          <input type="email" name="email" />
-        </div>
-        <div>
-          <label>Contraseña</label>
-          <input type="password" name="password" />
-        </div>
-        <a>¿No estas registrado?</a>
-        <input type="submit" />
-      </form>
-    </dialog>
+    <div className={styles.modal} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <h2>Inicia sesión</h2>
+        <form id="form" onSubmit={handleSubmit}>
+          <div>
+            <label>Correo electronico</label>
+            <input type="email" name="email" required />
+          </div>
+          <div>
+            <label>Contraseña</label>
+            <input type="password" name="password" required />
+          </div>
+          <a>¿No estas registrado?</a>
+          <input type="submit" value="Iniciar sesión" />
+        </form>
+      </div>
+    </div>
   );
 }

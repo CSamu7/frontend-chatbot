@@ -1,14 +1,17 @@
 .logo {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .logoImg {
-  width: 100px;
+  width: 50px;
+  height: auto;
 }
 
 .logoText {
   font-size: 2.5rem;
   font-weight: bold;
   color: #000;
+  margin: 0;
 }

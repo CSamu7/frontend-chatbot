@@ -7,9 +7,10 @@ import Logo from "../components/Logo";
 import NavMenu from "../components/NavMenu";
 
 export default function ChatBotPage() {
-  const [isLoginModalActive, setIsLoganModalActive] = useState(false);
+  const [isLoginModalActive, setIsLoginModalActive] = useState(false);
 
-  const handleLoginModal = () => setIsLoganModalActive(true);
+  const handleLoginModal = () => setIsLoginModalActive(true);
+  const closeLoginModal = () => setIsLoginModalActive(false);
 
   return (
     <>
@@ -19,9 +20,10 @@ export default function ChatBotPage() {
       </header>
       <ChatsHistory></ChatsHistory>
       <ActualChat></ActualChat>
-      {isLoginModalActive && (
-        <LoginModal isActive={isLoginModalActive}></LoginModal>
-      )}
+      <LoginModal 
+        isActive={isLoginModalActive} 
+        onClose={closeLoginModal}
+      ></LoginModal>
     </>
   );
 }
