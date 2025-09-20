@@ -11,7 +11,19 @@ export default function userServices() {
       },
     });
 
-    console.log(request);
+    if (!request.ok) throw request;
+
+    const response = await request.json();
+
+    return response;
+  };
+
+  const getUserService = async (token, id) => {
+    const request = await fetch(`${import.meta.env.VITE_USER_URL}/${id}`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
 
     if (!request.ok) throw request;
 
@@ -20,5 +32,5 @@ export default function userServices() {
     return response;
   };
 
-  return { loginService };
+  return { loginService, getUserService };
 }

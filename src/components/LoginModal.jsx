@@ -1,9 +1,8 @@
-import { useState } from "react";
 import useUser from "../hooks/useUser";
 import styles from "./LoginModal.module.css";
 
 export default function LoginModal({ closeModal, isActive }) {
-  const { user, error, login } = useUser();
+  const { error, login } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,6 +11,11 @@ export default function LoginModal({ closeModal, isActive }) {
     const password = e.target.password.value;
 
     await login(email, password);
+    //<<< Mostrar mensaje de inicio de sesión aceptado >>>
+    if (error === "") {
+      closeModal();
+    }
+    //<<< Si hubo un error, entonces mostrarlo en pantalla >>>
   };
 
   if (!isActive) return null;
