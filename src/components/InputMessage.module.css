@@ -1,0 +1,64 @@
+.formAsk {
+  display: flex;
+  align-items: center;
+  background-color: #faf9f6;
+  padding: 1rem;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.formInput {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 2rem;
+  border: 1px solid #ccc;
+  margin-right: 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  min-height: 20px;
+  max-height: 150px;
+}
+
+.sendMsg {
+  padding: 1rem;
+  border-radius: 2rem;
+  background-color: #333;
+  color: #faf9f6;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.sendMsg:hover {
+  background-color: #555;
+}
+
+.sendMsg img {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .formAsk {
+    padding: 0.5rem;
+  }
+
+  .formInput {
+    margin-right: 0.5rem;
+    padding: 0.8rem;
+  }
+
+  .sendMsg {
+    width: 40px;
+    height: 40px;
+    padding: 0.5rem;
+  }
+}

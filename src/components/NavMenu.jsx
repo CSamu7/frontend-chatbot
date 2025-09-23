@@ -6,7 +6,7 @@ export default function NavMenu({ onLogin, user }) {
       <ul className={styles.menuList}>
         <li className={styles.menuItem}>
           {user ? (
-            <p>{user.username}</p>
+            <p className={styles.username}>{user.username}</p>
           ) : (
             <button className={styles.menuLink} onClick={onLogin}>
               Iniciar sesión

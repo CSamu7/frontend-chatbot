@@ -1,3 +1,24 @@
+.app {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "history chat";
+  grid-template-columns: 275px 1fr;
+  grid-template-rows: 120px 1fr;
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .app {
+    grid-template-areas:
+      "header"
+      "chat"
+      "history";
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px 1fr auto;
+  }
+}
+
 .header {
   grid-area: header;
   background-color: #f1d7be;

@@ -7,21 +7,21 @@ export default function useUser() {
   const { loginService, getUserService } = userServices();
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const idUser = localStorage.getItem("id");
-        const user = await getUserService(token, idUser);
-        setUser(user);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
     getUser();
   }, []);
+
+  const getUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const idUser = localStorage.getItem("id");
+      const user = await getUserService(idUser, token);
+      setUser(user);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   const login = async (email, password) => {
     setError("");
@@ -37,5 +37,5 @@ export default function useUser() {
     }
   };
 
-  return { user, error, login };
+  return { user, error, login, getUser };
 }

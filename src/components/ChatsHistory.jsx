@@ -1,24 +1,26 @@
+import useChat from "../hooks/useChat";
+import ChatItem from "./ChatItem";
 import styles from "./ChatsHistory.module.css";
 
-export default function HistoryConversations() {
-  const items = [
-    { date: "24-09-2025", title: "Hola, Samu" },
-    { date: "24-09-2025", title: "Estoy probando esto" },
-  ];
+export default function ChatsHistory() {
+  const { chats } = useChat();
 
-  const past_chats = items.map((item, index) => {
+  const past_chats = chats.map((chat) => {
     return (
-      <div key={index}>
-        <h3>{item.title}</h3>
-        <p>{item.date}</p>
-      </div>
+      <ChatItem
+        key={chat.id}
+        id={chat.id}
+        title={chat.title}
+        date={chat["created_at"]}
+      ></ChatItem>
     );
   });
 
   return (
     <aside className={styles.pastConversations}>
       <h2 className={styles.title}>Conversaciones pasadas</h2>
-      {past_chats}
+
+      {past_chats.length === 0 ? <p>No hay chats recientes</p> : past_chats}
     </aside>
   );
 }

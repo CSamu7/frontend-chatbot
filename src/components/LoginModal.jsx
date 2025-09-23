@@ -21,8 +21,13 @@ export default function LoginModal({ closeModal, isActive }) {
   if (!isActive) return null;
 
   return (
-    <div className={styles.modal} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+    <div className={styles.modal} onClick={closeModal}>
+      <div
+        className={styles.modalContent}
+        onClick={async (e) => {
+          e.stopPropagation();
+        }}
+      >
         <h2>Inicia sesión</h2>
         <form id="form" onSubmit={handleSubmit}>
           <div>

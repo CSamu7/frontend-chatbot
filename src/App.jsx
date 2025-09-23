@@ -1,11 +1,12 @@
+import { Link, Route, Router, Switch } from "wouter";
 import "./App.css";
 import ChatBotPage from "./pages/ChatBotPage";
 
 function App() {
   return (
-    <div className="app">
-      <ChatBotPage></ChatBotPage>
-    </div>
+    <Switch>
+      <Route path="/home" component={ChatBotPage} nest></Route>
+    </Switch>
   );
 }
 

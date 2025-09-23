@@ -18,7 +18,7 @@ export default function userServices() {
     return response;
   };
 
-  const getUserService = async (token, id) => {
+  const getUserService = async (id, token) => {
     const request = await fetch(`${import.meta.env.VITE_USER_URL}/${id}`, {
       headers: {
         Authorization: `Token ${token}`,

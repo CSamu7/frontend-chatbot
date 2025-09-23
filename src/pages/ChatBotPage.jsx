@@ -1,20 +1,19 @@
 import ChatsHistory from "../components/ChatsHistory";
-import ActualChat from "../components/ActualChat";
+import ChatSelected from "../components/ChatSelected";
 import { useState } from "react";
 import styles from "./ChatBotPage.module.css";
 import LoginModal from "../components/LoginModal";
 import Logo from "../components/Logo";
 import NavMenu from "../components/NavMenu";
 import useUser from "../hooks/useUser";
+import { Route, Switch } from "wouter";
 
 export default function ChatBotPage() {
   const [isLoginModalActive, setIsLoganModalActive] = useState(false);
   const { user } = useUser();
 
-  console.log(user);
-
   return (
-    <>
+    <div className={styles.app}>
       <header className={styles.header}>
         <Logo></Logo>
         <NavMenu
@@ -23,13 +22,13 @@ export default function ChatBotPage() {
         ></NavMenu>
       </header>
       <ChatsHistory></ChatsHistory>
-      <ActualChat></ActualChat>
+      <ChatSelected></ChatSelected>
       {isLoginModalActive && (
         <LoginModal
           isActive={isLoginModalActive}
           closeModal={() => setIsLoganModalActive(false)}
         ></LoginModal>
       )}
-    </>
+    </div>
   );
 }
