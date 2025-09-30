@@ -1,6 +1,6 @@
 export default function userServices() {
   const loginService = async (email, password) => {
-    const request = await fetch(import.meta.env.VITE_TOKEN_URL, {
+    const request = await fetch(import.meta.env.VITE_LOGIN_URL, {
       method: "POST",
       body: JSON.stringify({
         email,
@@ -18,11 +18,9 @@ export default function userServices() {
     return response;
   };
 
-  const getUserService = async (id, token) => {
-    const request = await fetch(`${import.meta.env.VITE_USER_URL}/${id}`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
+  const getUserService = async () => {
+    const request = await fetch(`${import.meta.env.VITE_USER_DATA_URL}`, {
+      credentials: "include",
     });
 
     if (!request.ok) throw request;

@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { getChatsService } from "../services/chatServices";
 
-export default function useChat() {
+export default function useChat(user) {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    getChats();
-  }, []);
+    const getChats = async (idUser) => {
+      try {
+        const chats = await getChatsService(idUser);
 
-  const getChats = async () => {
-    const id = localStorage.getItem("id");
-    const token = localStorage.getItem("token");
+        setChats(chats.results);
+      } catch (error) {}
+    };
 
-    const chats = await getChatsService(id, token);
-    setChats(chats.results);
-  };
+    if (user) getChats(user.id);
+  }, [user]);
 
   const deleteChat = () => {};
 

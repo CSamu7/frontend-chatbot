@@ -2,8 +2,8 @@ import useChat from "../hooks/useChat";
 import ChatItem from "./ChatItem";
 import styles from "./ChatsHistory.module.css";
 
-export default function ChatsHistory() {
-  const { chats } = useChat();
+export default function ChatsHistory({ user }) {
+  const { chats } = useChat(user);
 
   const past_chats = chats.map((chat) => {
     return (

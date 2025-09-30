@@ -21,7 +21,7 @@ export default function ChatBotPage() {
           user={user}
         ></NavMenu>
       </header>
-      <ChatsHistory></ChatsHistory>
+      <ChatsHistory user={user}></ChatsHistory>
       <ChatSelected></ChatSelected>
       {isLoginModalActive && (
         <LoginModal

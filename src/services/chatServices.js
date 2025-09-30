@@ -1,10 +1,10 @@
-const getChatsService = async (id_user, token) => {
+const getChatsService = async (id_user) => {
+  if (id_user === null) return;
+
   const request = await fetch(
-    `${import.meta.env.VITE_USER_URL}/${id_user}/chats`,
+    `${import.meta.env.VITE_USER_URL}${id_user}/chats`,
     {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
+      credentials: "include",
     }
   );
 

@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
+import { getMessagesService } from "../services/messageServices";
 
-export default function UseMessage() {
-  const [messages, setMessages] = useState({});
+export default function useMessage(idChat) {
+  const [messages, setMessages] = useState([]);
 
-  useEffect(() => {});
+  useEffect(() => {
+    const getMessages = async () => {
+      const messages = await getMessagesService(idChat);
 
-  const getMessages = () => {};
+      setMessages(messages.results);
+    };
+
+    getMessages();
+  }, []);
+
+  return { messages };
 }

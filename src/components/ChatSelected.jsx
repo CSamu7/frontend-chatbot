@@ -9,7 +9,9 @@ export default function ChatSelected() {
     <div className={styles.chatContainer}>
       <Switch>
         <Route path="/" component={NoChatSelected}></Route>
-        <Route path="/chats/:id" component={ChatContent}></Route>
+        <Route path="/chats/:id">
+          {(params) => <ChatContent id={params.id}></ChatContent>}
+        </Route>
       </Switch>
 
       <InputMessage></InputMessage>

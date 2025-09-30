@@ -7,21 +7,18 @@ export default function useUser() {
   const { loginService, getUserService } = userServices();
 
   useEffect(() => {
+    const getUser = async () => {
+      try {
+        const user = await getUserService();
+        localStorage.setItem("id", user.id);
+        setUser(user);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
     getUser();
   }, []);
-
-  const getUser = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const idUser = localStorage.getItem("id");
-      const user = await getUserService(idUser, token);
-      setUser(user);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
 
   const login = async (email, password) => {
     setError("");
@@ -29,7 +26,6 @@ export default function useUser() {
     try {
       const response = await loginService(email, password);
 
-      localStorage.setItem("token", response.token);
       localStorage.setItem("id", response["id_user"]);
     } catch (request) {
       const response = await request.json();
@@ -37,5 +33,5 @@ export default function useUser() {
     }
   };
 
-  return { user, error, login, getUser };
+  return { user, error, login };
 }
