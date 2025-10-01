@@ -7,6 +7,9 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
+
+  display: flex;
+  justify-content: space-between;
 }
 
 .chatItem:hover {
@@ -23,6 +26,14 @@
   margin: 0;
   font-size: 0.8rem;
   color: #666;
+}
+
+.btnDelete {
+  border: 0;
+  background-color: red;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
 }
 
 @media (max-width: 768px) {

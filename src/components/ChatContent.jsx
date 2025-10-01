@@ -2,7 +2,7 @@ import useMessage from "../hooks/useMessage";
 import styles from "./ChatContent.module.css";
 
 export default function ChatContent({ id }) {
-  const { messages } = useMessage(id);
+  const { messages, errorMessage } = useMessage(id);
 
   const messagesJSX = messages.map((msg, index) => (
     <div
@@ -16,5 +16,13 @@ export default function ChatContent({ id }) {
     </div>
   ));
 
-  return <div className={styles.chat}>{messagesJSX}</div>;
+  return (
+    <div className={styles.chat}>
+      {messagesJSX.length <= 0 ? (
+        <p>Envia un mensaje para interactuar con el chatbot</p>
+      ) : (
+        messagesJSX
+      )}
+    </div>
+  );
 }

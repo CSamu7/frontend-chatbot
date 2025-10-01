@@ -18,7 +18,7 @@ export default function useUser() {
     };
 
     getUser();
-  }, []);
+  }, [getUserService]);
 
   const login = async (email, password) => {
     setError("");

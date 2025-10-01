@@ -2,6 +2,7 @@
   grid-area: history;
   display: flex;
   flex-direction: column;
+  gap: 20px;
   background-color: #f7f3ed;
   width: 100%;
   padding: 1rem;
@@ -10,9 +11,18 @@
   overflow-y: auto;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1.5px solid #ccc;
+  padding-bottom: 1rem;
+}
+
+.createChatbtn {
+  padding: 10px;
+}
+
 .title {
-  margin: 0 0 1rem 0;
   color: #000;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #ccc;
+  font-size: 1.4rem;
 }

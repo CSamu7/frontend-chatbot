@@ -8,6 +8,8 @@ const getMessagesService = async (idChat) => {
     }
   );
 
+  if (!request.ok) throw { status: request.status, text: request.statusText };
+
   const response = await request.json();
 
   return response;
