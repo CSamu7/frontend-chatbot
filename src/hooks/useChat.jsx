@@ -1,46 +1,30 @@
 import { useEffect, useState } from "react";
-import {
-  getChatsService,
-  deleteChatService,
-  postChatService,
-} from "../services/chatServices";
+import { chatsService } from "../services/chatServices";
 
 export default function useChat(user) {
   const [chats, setChats] = useState([]);
-  const [errorChat, setErrorChat] = useState("");
 
   useEffect(() => {
-    const getChats = async (idUser) => {
-      try {
-        const chats = await getChatsService(idUser);
-
-        setChats(chats.results);
-      } catch (error) {
-        setErrorChat(error.message);
-      }
+    const getChats = async () => {
+      const chats = await chatsService.getChats(user.id);
+      setChats(chats.results);
     };
 
-    if (user) getChats(user.id);
+    user ? getChats() : setChats([]);
   }, [user]);
 
   const deleteChat = async (id_chat) => {
-    try {
-      const chats = await deleteChatService(id_chat);
-
-      setChats(chats);
-    } catch (error) {
-      setErrorChat(error.message);
-    }
+    await chatsService.deleteChat(id_chat);
+    setChats(() => chats.filter((chat) => chat.id !== id_chat));
   };
 
   const postChat = async (title) => {
-    try {
-      const id_user = localStorage.getItem("id");
+    const id_user = localStorage.getItem("id");
+    const chat = await chatsService.postChat(id_user, title);
 
-      return await postChatService(id_user, title);
-    } catch (error) {
-      setErrorChat(error.message);
-    }
+    setChats([...chats, chat]);
+
+    return chat;
   };
 
   return { chats, deleteChat, postChat };

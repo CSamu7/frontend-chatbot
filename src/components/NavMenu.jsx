@@ -1,6 +1,9 @@
+import { useLocation } from "wouter";
 import styles from "./NavMenu.module.css";
 
-export default function NavMenu({ onLogin, user }) {
+export default function NavMenu({ onLogin, onLogout, user }) {
+  const [_, navigate] = useLocation();
+
   return (
     <nav className={styles.menu}>
       <ul className={styles.menuList}>
@@ -13,6 +16,18 @@ export default function NavMenu({ onLogin, user }) {
             </button>
           )}
         </li>
+        {user && (
+          <li>
+            <button
+              onClick={async () => {
+                await onLogout();
+                navigate("/");
+              }}
+            >
+              Cerrar sesión
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   );

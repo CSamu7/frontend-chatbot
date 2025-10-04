@@ -1,16 +1,21 @@
 import ChatsHistory from "../components/ChatsHistory";
 import ChatSelected from "../components/ChatSelected";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./ChatBotPage.module.css";
 import LoginModal from "../components/LoginModal";
 import Logo from "../components/Logo";
 import NavMenu from "../components/NavMenu";
 import useUser from "../hooks/useUser";
-import { Route, Switch } from "wouter";
+import useAuth from "../hooks/useAuth";
 
 export default function ChatBotPage() {
   const [isLoginModalActive, setIsLoganModalActive] = useState(false);
-  const { user } = useUser();
+  const { user, logout } = useUser();
+  const { setCsrf } = useAuth();
+
+  useEffect(() => {
+    setCsrf();
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -18,6 +23,7 @@ export default function ChatBotPage() {
         <Logo></Logo>
         <NavMenu
           onLogin={() => setIsLoganModalActive(true)}
+          onLogout={logout}
           user={user}
         ></NavMenu>
       </header>
@@ -25,7 +31,6 @@ export default function ChatBotPage() {
       <ChatSelected></ChatSelected>
       {isLoginModalActive && (
         <LoginModal
-          isActive={isLoginModalActive}
           closeModal={() => setIsLoganModalActive(false)}
         ></LoginModal>
       )}

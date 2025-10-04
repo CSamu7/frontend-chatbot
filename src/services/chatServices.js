@@ -1,56 +1,50 @@
 import { createCsrfHeaders } from "../helpers/helper";
 
-const getChatsService = async (id_user) => {
-  if (id_user === null) return;
+const chatsService = {
+  getChats: async (id_user) => {
+    const request = await fetch(
+      `${import.meta.env.VITE_USER_URL}${id_user}/chats/`,
+      {
+        credentials: "include",
+      }
+    );
 
-  const request = await fetch(
-    `${import.meta.env.VITE_USER_URL}${id_user}/chats`,
-    {
-      credentials: "include",
-    }
-  );
+    const response = await request.json();
 
-  const response = await request.json();
+    return response;
+  },
+  deleteChat: async (id_chat) => {
+    const headers = createCsrfHeaders();
 
-  return response;
-};
-
-const deleteChatService = async (id_chat) => {
-  const headers = createCsrfHeaders();
-
-  const request = await fetch(`${import.meta.env.VITE_CHAT_URL}${id_chat}`, {
-    method: "DELETE",
-    credentials: "include",
-    headers,
-  });
-
-  const response = await request.json();
-
-  return response;
-};
-
-const postChatService = async (id_user, title) => {
-  const headers = createCsrfHeaders();
-
-  headers.append("Accept", "application/json");
-  headers.set("Content-Type", "application/json");
-
-  const request = await fetch(
-    `${import.meta.env.VITE_USER_URL}${id_user}/chats/`,
-    {
-      method: "POST",
+    await fetch(`${import.meta.env.VITE_CHAT_URL}${id_chat}`, {
+      method: "DELETE",
       credentials: "include",
       headers,
-      body: JSON.stringify({
-        title,
-        user: id_user,
-      }),
-    }
-  );
+    });
+  },
+  postChat: async (id_user, title) => {
+    const headers = createCsrfHeaders();
 
-  const response = await request.json();
+    headers.append("Accept", "application/json");
+    headers.set("Content-Type", "application/json");
 
-  return response;
+    const request = await fetch(
+      `${import.meta.env.VITE_USER_URL}${id_user}/chats/`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers,
+        body: JSON.stringify({
+          title,
+          user: id_user,
+        }),
+      }
+    );
+
+    const response = await request.json();
+
+    return response;
+  },
 };
 
-export { getChatsService, deleteChatService, postChatService };
+export { chatsService };

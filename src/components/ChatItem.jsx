@@ -1,17 +1,15 @@
 import { Link, useLocation } from "wouter";
 import styles from "./ChatItem.module.css";
-import useChat from "../hooks/useChat";
 
-export default function ChatItem({ title, date, id }) {
+export default function ChatItem({ title, date, id, onDeleteChat }) {
   const formatedDate = new Date(date);
   const [location, navigate] = useLocation();
-  const { deleteChat } = useChat();
 
   const handleDeleteChat = async (e) => {
     e.stopPropagation();
     e.preventDefault();
 
-    await deleteChat(id);
+    await onDeleteChat(id);
 
     if (location.includes(id)) navigate("");
   };

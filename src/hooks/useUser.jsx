@@ -1,37 +1,32 @@
 import { useEffect, useState } from "react";
-import userServices from "../services/userServices";
+import { userServices } from "../services/userServices";
 
 export default function useUser() {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
-  const { loginService, getUserService } = userServices();
 
   useEffect(() => {
+    const idUser = localStorage.getItem("id");
+
     const getUser = async () => {
-      try {
-        const user = await getUserService();
-        localStorage.setItem("id", user.id);
-        setUser(user);
-      } catch (error) {
-        setError(error.message);
-      }
+      const user = await userServices.getUser();
+
+      setUser(user);
     };
 
-    getUser();
-  }, [getUserService]);
+    if (!user && idUser) getUser();
+  });
 
   const login = async (email, password) => {
-    setError("");
-
-    try {
-      const response = await loginService(email, password);
-
-      localStorage.setItem("id", response["id_user"]);
-    } catch (request) {
-      const response = await request.json();
-      setError(response.detail);
-    }
+    const response = await userServices.login(email, password);
+    localStorage.setItem("id", response["id"]);
+    setUser(response);
   };
 
-  return { user, error, login };
+  const logout = async () => {
+    localStorage.clear("");
+    setUser(null);
+    await userServices.logout();
+  };
+
+  return { user, login, logout };
 }
