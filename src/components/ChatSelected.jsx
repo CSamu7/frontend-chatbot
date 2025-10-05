@@ -3,18 +3,26 @@ import ChatContent from "./ChatContent";
 import InputMessage from "./InputMessage";
 import NoChatSelected from "./NoChatSelected";
 import { Route, Switch } from "wouter";
+import useMessage from "../hooks/useMessage";
 
 export default function ChatSelected() {
+  const { messages, getMessages, postMessage } = useMessage();
+
   return (
     <div className={styles.chatContainer}>
       <Switch>
         <Route path="/" component={NoChatSelected}></Route>
         <Route path="/chats/:id">
-          {(params) => <ChatContent id={params.id}></ChatContent>}
+          {(params) => (
+            <ChatContent
+              idChat={params.id}
+              messages={messages}
+              onMessages={getMessages}
+            ></ChatContent>
+          )}
         </Route>
       </Switch>
-
-      <InputMessage></InputMessage>
+      <InputMessage onPostMessage={postMessage}></InputMessage>
     </div>
   );
 }

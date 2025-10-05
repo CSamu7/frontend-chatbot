@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { getMessagesService } from "../services/messageServices";
+import { useState } from "react";
+import { messagesService } from "../services/messageServices";
 
-export default function useMessage(idChat) {
+export default function useMessage() {
   const [messages, setMessages] = useState([]);
-  const [errorMessage, setErrorMessage] = useState({});
 
-  useEffect(() => {
-    const getMessages = async () => {
-      try {
-        const messages = await getMessagesService(idChat);
+  const getMessages = async (idChat) => {
+    const messages = await messagesService.getMessages(idChat);
 
-        setMessages(messages.results);
-      } catch (error) {
-        setErrorMessage(error);
-      }
-    };
+    setMessages(messages.results);
+  };
 
-    getMessages();
-  }, [idChat]);
+  const postMessage = async (idChat, text) => {
+    const idUser = localStorage.getItem("id");
 
-  return { messages, errorMessage };
+    await messagesService.postMessage(idChat, idUser, text);
+    const newMessages = await getMessages(idChat);
+
+    setMessages(newMessages.results);
+  };
+
+  return { messages, getMessages, postMessage };
 }

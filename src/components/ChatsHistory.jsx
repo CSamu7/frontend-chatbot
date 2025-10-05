@@ -3,7 +3,7 @@ import useChat from "../hooks/useChat";
 import ChatItem from "./ChatItem";
 import styles from "./ChatsHistory.module.css";
 
-export default function ChatsHistory({ user }) {
+export default function ChatsHistory({ user, onSetActiveChat }) {
   const { chats, deleteChat, postChat } = useChat(user);
   const [_, navigate] = useLocation();
 
@@ -11,6 +11,8 @@ export default function ChatsHistory({ user }) {
     e.preventDefault();
 
     const chat = await postChat("Nuevo chat");
+
+    onSetActiveChat(chat.id);
     navigate(`/chats/${chat.id}`);
   };
 
@@ -22,6 +24,7 @@ export default function ChatsHistory({ user }) {
         title={chat.title}
         date={chat["created_at"]}
         onDeleteChat={deleteChat}
+        onSetActiveChat={onSetActiveChat}
       ></ChatItem>
     );
   });

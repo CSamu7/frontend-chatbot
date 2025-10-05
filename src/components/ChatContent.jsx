@@ -1,8 +1,10 @@
-import useMessage from "../hooks/useMessage";
+import { useEffect } from "react";
 import styles from "./ChatContent.module.css";
 
-export default function ChatContent({ id }) {
-  const { messages, errorMessage } = useMessage(id);
+export default function ChatContent({ idChat, messages, onMessages }) {
+  useEffect(() => {
+    onMessages(idChat);
+  }, [idChat]);
 
   const messagesJSX = messages.map((msg, index) => (
     <div
