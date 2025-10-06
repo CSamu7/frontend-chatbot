@@ -10,19 +10,23 @@ export default function ChatSelected() {
 
   return (
     <div className={styles.chatContainer}>
-      <Switch>
-        <Route path="/" component={NoChatSelected}></Route>
-        <Route path="/chats/:id">
-          {(params) => (
-            <ChatContent
-              idChat={params.id}
-              messages={messages}
-              onMessages={getMessages}
-            ></ChatContent>
-          )}
-        </Route>
-      </Switch>
-      <InputMessage onPostMessage={postMessage}></InputMessage>
+      <div className={styles.chatContent}>
+        <Switch>
+          <Route path="/" component={NoChatSelected}></Route>
+          <Route path="/chats/:id">
+            {(params) => (
+              <ChatContent
+                idChat={params.id}
+                messages={messages}
+                onMessages={getMessages}
+              />
+            )}
+          </Route>
+        </Switch>
+      </div>
+      <div className={styles.inputContainer}>
+        <InputMessage onPostMessage={postMessage} />
+      </div>
     </div>
   );
 }

@@ -1,8 +1,12 @@
+import styles from "./NoChatSelected.module.css";
+
 export default function NoChatSelected() {
   return (
-    <p>
-      Selecciona una conversación para ver tus mensajes, o envia un mensaje para
-      crear una nueva conversacion
-    </p>
+    <div className={styles.noChatContainer}>
+      <div className={styles.noChatIcon}>💬</div>
+      <p className={styles.noChatMessage}>
+        Selecciona una conversación para ver tus mensajes, o envía un mensaje para crear una nueva conversación
+      </p>
+    </div>
   );
 }
