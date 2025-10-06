@@ -42,7 +42,6 @@ const userServices = {
   registerUser: async (user) => {
     const request = await fetch(`${import.meta.env.VITE_USER_URL}`, {
       method: "POST",
-      credentials: "include",
       body: JSON.stringify(user),
       headers: {
         "content-type": "application/json",

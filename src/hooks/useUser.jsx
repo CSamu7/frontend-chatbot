@@ -16,7 +16,7 @@ export default function useUser() {
     if (!user && idUser) getUser();
   });
 
-  const registerUser = async ({ user }) => {
+  const registerUser = async (user) => {
     await userServices.registerUser(user);
   };
 
