@@ -11,7 +11,6 @@ import useAuth from "../hooks/useAuth";
 export default function ChatBotPage() {
   const [isLoginModalActive, setIsLoganModalActive] = useState(false);
   const { user, logout } = useUser();
-  const [activeChat, setActiveChat] = useState(null);
   const { setCsrf } = useAuth();
 
   useEffect(() => {
