@@ -16,6 +16,10 @@ export default function useUser() {
     if (!user && idUser) getUser();
   });
 
+  const registerUser = async ({ user }) => {
+    await userServices.registerUser(user);
+  };
+
   const login = async (email, password) => {
     const response = await userServices.login(email, password);
     localStorage.setItem("id", response["id"]);
@@ -28,5 +32,5 @@ export default function useUser() {
     await userServices.logout();
   };
 
-  return { user, login, logout };
+  return { user, login, logout, registerUser };
 }

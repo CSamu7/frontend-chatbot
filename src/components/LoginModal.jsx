@@ -1,10 +1,12 @@
 import { useState } from "react";
 import useUser from "../hooks/useUser";
 import styles from "./LoginModal.module.css";
+import { Link, useLocation } from "wouter";
 
 export default function LoginModal({ closeModal }) {
   const { login } = useUser();
   const [error, setError] = useState("");
+  const [location, navigate] = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ export default function LoginModal({ closeModal }) {
             <label>Contraseña</label>
             <input type="password" name="password" required />
           </div>
-          <a>¿No estas registrado?</a>
+          <a href="/signup">¿No estas registrado?</a>
           {error && <p>{error}</p>}
           <input type="submit" value="Iniciar sesión" />
         </form>
