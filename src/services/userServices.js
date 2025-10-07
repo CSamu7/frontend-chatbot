@@ -38,6 +38,18 @@ const userServices = {
 
     if (!request.ok) throw request;
   },
+
+  registerUser: async (user) => {
+    const request = await fetch(`${import.meta.env.VITE_USER_URL}`, {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    if (!request.ok) throw await request.json();
+  },
 };
 
 export { userServices };

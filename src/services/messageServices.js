@@ -1,4 +1,4 @@
-import { createCsrfHeaders } from "../helpers/helper";
+import { createCsrfHeaders } from "../helpers/csrfHelper";
 
 const messagesService = {
   getMessages: async (idChat) => {

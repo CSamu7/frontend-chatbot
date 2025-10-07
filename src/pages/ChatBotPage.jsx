@@ -7,11 +7,11 @@ import Logo from "../components/Logo";
 import NavMenu from "../components/NavMenu";
 import useUser from "../hooks/useUser";
 import useAuth from "../hooks/useAuth";
+import Header from "../components/Header";
 
 export default function ChatBotPage() {
   const [isLoginModalActive, setIsLoganModalActive] = useState(false);
   const { user, logout } = useUser();
-  const [activeChat, setActiveChat] = useState(null);
   const { setCsrf } = useAuth();
 
   useEffect(() => {
@@ -20,14 +20,14 @@ export default function ChatBotPage() {
 
   return (
     <div className={styles.app}>
-      <header className={styles.header}>
-        <Logo></Logo>
+      <Header>
         <NavMenu
           onLogin={() => setIsLoganModalActive(true)}
           onLogout={logout}
           user={user}
         ></NavMenu>
-      </header>
+      </Header>
+
       <ChatsHistory user={user}></ChatsHistory>
       <ChatSelected></ChatSelected>
       {isLoginModalActive && (
