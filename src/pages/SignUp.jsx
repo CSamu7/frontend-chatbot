@@ -16,15 +16,15 @@ export default function SignUp() {
     const newErrors = [];
 
     if (!email.includes("@")) {
-      newErrors.push("El correo no es valido");
+      newErrors.push("El correo no es válido");
     }
 
     if (password === "" || confirmedPassword === "") {
-      newErrors.push("La contraseña esta vacia");
+      newErrors.push("La contraseña está vacía");
     }
 
     if (password !== confirmedPassword) {
-      newErrors.push("La contraseña no coincide");
+      newErrors.push("Las contraseñas no coinciden");
     }
 
     return newErrors;
@@ -50,47 +50,55 @@ export default function SignUp() {
 
     try {
       await registerUser(user);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      setFormError(["Error en el registro. Intenta nuevamente."]);
+    }
   };
 
   return (
     <div className={styles.app}>
       <Header></Header>
-      <form ref={form} onSubmit={handleRegisterUser}>
-        <h2>Registro</h2>
-        <div>
-          <label htmlFor="email">Correo</label>
-          <input
-            type="email"
-            autoComplete="off"
-            name="email"
-            id="email"
-            required
-          ></input>
-        </div>
-        <div>
-          <label htmlFor="username">Nombre de usuario</label>
-          <input type="text" name="username" id="username"></input>
-        </div>
-        <div>
-          <label htmlFor="password">Contraseña</label>
-          <input type="password" name="password" id="password"></input>
-        </div>
-        <div>
-          <label htmlFor="confirm-password">Repetir contraseña</label>
-          <input
-            type="password"
-            name="confirm-password"
-            id="confirm-password"
-          ></input>
-        </div>
-        <div>
-          {formError.map((error) => (
-            <p>{error}</p>
-          ))}
-        </div>
-        <input type="submit" />
-      </form>
+      <div className={styles.formContainer}>
+        <form ref={form} onSubmit={handleRegisterUser}>
+          <h2>Registro</h2>
+          <div>
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+              type="email"
+              autoComplete="off"
+              name="email"
+              id="email"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="username">Nombre de usuario</label>
+            <input type="text" name="username" id="username" required />
+          </div>
+          <div>
+            <label htmlFor="password">Contraseña</label>
+            <input type="password" name="password" id="password" required />
+          </div>
+          <div>
+            <label htmlFor="confirm-password">Confirmar contraseña</label>
+            <input
+              type="password"
+              name="confirm-password"
+              id="confirm-password"
+              required
+            />
+          </div>
+          {formError.length > 0 && (
+            <div className={styles.error}>
+              {formError.map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </div>
+          )}
+          <input type="submit" value="Registrarse" />
+        </form>
+      </div>
     </div>
   );
 }
