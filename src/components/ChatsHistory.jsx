@@ -3,14 +3,18 @@ import useChat from "../hooks/useChat";
 import ChatItem from "./ChatItem";
 import styles from "./ChatsHistory.module.css";
 
-export default function ChatsHistory({ user, onSetActiveChat }) {
-  const { chats, deleteChat, postChat } = useChat(user);
+export default function ChatsHistory({
+  chats,
+  onPostChat,
+  onDeleteChat,
+  onSetActiveChat,
+}) {
   const [_, navigate] = useLocation();
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
 
-    const chat = await postChat("Nuevo chat");
+    const chat = await onPostChat("Nuevo chat");
 
     onSetActiveChat(chat.id);
     navigate(`/chats/${chat.id}`);
@@ -23,7 +27,7 @@ export default function ChatsHistory({ user, onSetActiveChat }) {
         id={chat.id}
         title={chat.title}
         date={chat["created_at"]}
-        onDeleteChat={deleteChat}
+        onDeleteChat={onDeleteChat}
         onSetActiveChat={onSetActiveChat}
       ></ChatItem>
     );
@@ -39,7 +43,7 @@ export default function ChatsHistory({ user, onSetActiveChat }) {
       </div>
       <div className={styles.chatItems}>
         {past_chats.length === 0 ? (
-          <p>No tienes chats recientes</p>
+          <p className={styles.messageNotChats}>No tienes chats recientes</p>
         ) : (
           past_chats
         )}

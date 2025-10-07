@@ -50,9 +50,7 @@ export default function SignUp() {
 
     try {
       await registerUser(user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

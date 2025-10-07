@@ -5,7 +5,9 @@ export default function Logo() {
   return (
     <div className={styles.logo}>
       <img src={logo} className={styles.logoImg}></img>
-      <p className={styles.logoText}>SamuBot</p>
+      <a href="/home" className={styles.logoText}>
+        SamuBot
+      </a>
     </div>
   );
 }

@@ -3,19 +3,25 @@ import send_img from "../assets/chatbot_send_icon.png";
 import { useState } from "react";
 import { useLocation } from "wouter";
 
-export default function InputMessage({ onPostMessage }) {
+export default function InputMessage({ onPostMessage, onPostChat }) {
   const [isSending, setIsSending] = useState(false);
   const [text, setText] = useState("");
-  const [location, _] = useLocation();
+  const [location, navigate] = useLocation();
 
   const idChat = parseInt(location.split("/").at(-1));
 
   const handleSendMessage = async () => {
     try {
       setIsSending(true);
-      await onPostMessage(idChat, text);
+
+      if (location.includes("chat")) {
+        await onPostMessage(idChat, text);
+      } else {
+        const newChat = await onPostChat("Nuevo chat");
+        await onPostMessage(newChat.id, text);
+        navigate(`/chats/${newChat.id}`);
+      }
     } catch (error) {
-      console.log(error);
     } finally {
       setIsSending(false);
       setText("");

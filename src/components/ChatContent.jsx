@@ -19,12 +19,14 @@ export default function ChatContent({ idChat, messages, onMessages }) {
   ));
 
   return (
-  <div className={styles.chat}>
-    {messagesJSX.length <= 0 ? (
-      <p className={styles.emptyChatMessage}>Envia un mensaje para interactuar con el chatbot</p>
-    ) : (
-      messagesJSX
-    )}
-  </div>
-);
+    <div className={styles.chat}>
+      {messagesJSX.length <= 0 ? (
+        <p className={styles.emptyChatMessage}>
+          Envia un mensaje para interactuar con el chatbot
+        </p>
+      ) : (
+        messagesJSX
+      )}
+    </div>
+  );
 }
