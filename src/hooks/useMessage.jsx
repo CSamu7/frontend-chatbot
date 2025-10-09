@@ -16,7 +16,7 @@ export default function useMessage() {
     await messagesService.postMessage(idChat, idUser, text);
     const newMessages = await getMessages(idChat);
 
-    setMessages(newMessages);
+    setMessages(newMessages.results);
   };
 
   return { messages, getMessages, postMessage };
