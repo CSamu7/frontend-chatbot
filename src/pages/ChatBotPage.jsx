@@ -1,19 +1,22 @@
 import ChatsHistory from "../components/ChatsHistory";
 import ChatSelected from "../components/ChatSelected";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./ChatBotPage.module.css";
 import LoginModal from "../components/LoginModal";
 import NavMenu from "../components/NavMenu";
 import useUser from "../hooks/useUser";
 import useAuth from "../hooks/useAuth";
 import Header from "../components/Header";
+import ErrorPopup from "../components/ErrorPopup";
 import useChat from "../hooks/useChat";
+import { ErrorContext } from "../context/ErrorContext";
 
 export default function ChatBotPage() {
   const [isLoginModalActive, setIsLoganModalActive] = useState(false);
   const { user, logout } = useUser();
   const { setCsrf } = useAuth();
   const { chats, deleteChat, postChat } = useChat(user);
+  const [error, setError] = useContext(ErrorContext);
 
   useEffect(() => {
     setCsrf();
@@ -28,7 +31,6 @@ export default function ChatBotPage() {
           user={user}
         ></NavMenu>
       </Header>
-
       <ChatsHistory
         chats={chats}
         onDeleteChat={deleteChat}
@@ -40,6 +42,7 @@ export default function ChatBotPage() {
           closeModal={() => setIsLoganModalActive(false)}
         ></LoginModal>
       )}
+      <ErrorPopup errorMsg={error}></ErrorPopup>
     </div>
   );
 }

@@ -21,8 +21,9 @@ export default function useChat(user) {
   const postChat = async (title) => {
     const id_user = localStorage.getItem("id");
     const chat = await chatsService.postChat(id_user, title);
+    const newChats = await chatsService.getChats(id_user);
 
-    setChats([...chats, chat]);
+    setChats(newChats.service);
 
     return chat;
   };

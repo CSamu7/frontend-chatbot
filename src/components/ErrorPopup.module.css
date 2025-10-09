@@ -1,0 +1,47 @@
+.dialog {
+  position: absolute;
+  left: 40vw;
+  top: 40vh;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  width: 300px;
+  background-color: red;
+  color: white;
+  border: 0;
+  padding: 20px;
+}
+
+.invisible {
+  display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7f3ed;
+  cursor: pointer;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+.message {
+  font-size: 1.2rem;
+}

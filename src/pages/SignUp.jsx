@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import Header from "../components/Header";
 import useUser from "../hooks/useUser";
 import styles from "./SignUp.module.css";
+import { navigate } from "wouter/use-hash-location";
 
 export default function SignUp() {
   const { registerUser } = useUser();
@@ -50,9 +51,9 @@ export default function SignUp() {
 
     try {
       await registerUser(user);
+      navigate("/home/");
     } catch (error) {
-      console.log(error);
-      setFormError(["Error en el registro. Intenta nuevamente."]);
+      setFormError(error.email);
     }
   };
 

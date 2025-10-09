@@ -1,7 +1,8 @@
 import { useLocation } from "wouter";
-import useChat from "../hooks/useChat";
 import ChatItem from "./ChatItem";
 import styles from "./ChatsHistory.module.css";
+import { useContext } from "react";
+import { ErrorContext } from "../context/ErrorContext";
 
 export default function ChatsHistory({
   chats,
@@ -10,14 +11,20 @@ export default function ChatsHistory({
   onSetActiveChat,
 }) {
   const [_, navigate] = useLocation();
+  const [error, setError] = useContext(ErrorContext);
 
   const handleCreateChat = async (e) => {
-    e.preventDefault();
+    try {
+      setError("");
+      e.preventDefault();
 
-    const chat = await onPostChat("Nuevo chat");
+      const chat = await onPostChat("Nuevo chat");
 
-    onSetActiveChat(chat.id);
-    navigate(`/chats/${chat.id}`);
+      onSetActiveChat(chat.id);
+      navigate(`/chats/${chat.id}`);
+    } catch (error) {
+      setError(error.detail);
+    }
   };
 
   const past_chats = chats.map((chat) => {

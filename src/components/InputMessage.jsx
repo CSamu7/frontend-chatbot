@@ -1,12 +1,14 @@
 import styles from "./InputMessage.module.css";
 import send_img from "../assets/chatbot_send_icon.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation } from "wouter";
+import { ErrorContext } from "../context/ErrorContext";
 
 export default function InputMessage({ onPostMessage, onPostChat }) {
   const [isSending, setIsSending] = useState(false);
   const [text, setText] = useState("");
   const [location, navigate] = useLocation();
+  const [_, setError] = useContext(ErrorContext);
 
   const idChat = parseInt(location.split("/").at(-1));
 
@@ -22,6 +24,7 @@ export default function InputMessage({ onPostMessage, onPostChat }) {
         navigate(`/chats/${newChat.id}`);
       }
     } catch (error) {
+      setError(error.detail);
     } finally {
       setIsSending(false);
       setText("");
