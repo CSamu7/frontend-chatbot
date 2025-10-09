@@ -38,7 +38,7 @@ const messagesService = {
 
     const response = await request.json();
 
-    return response.results;
+    return response;
   },
 };
 

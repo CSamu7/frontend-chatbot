@@ -14,6 +14,7 @@ export default function InputMessage({ onPostMessage, onPostChat }) {
 
   const handleSendMessage = async () => {
     try {
+      setError("");
       setIsSending(true);
 
       if (location.includes("chat")) {
