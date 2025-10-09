@@ -23,7 +23,7 @@ export default function useChat(user) {
     const chat = await chatsService.postChat(id_user, title);
     const newChats = await chatsService.getChats(id_user);
 
-    setChats(newChats.service);
+    setChats(newChats.results);
 
     return chat;
   };
