@@ -19,8 +19,6 @@ export default function ChatsHistory({
       e.preventDefault();
 
       const chat = await onPostChat("Nuevo chat");
-
-      onSetActiveChat(chat.id);
       navigate(`/chats/${chat.id}`);
     } catch (error) {
       setError(error.detail);
