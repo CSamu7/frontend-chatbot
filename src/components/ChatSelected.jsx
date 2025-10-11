@@ -5,7 +5,7 @@ import NoChatSelected from "./NoChatSelected";
 import { Route, Switch } from "wouter";
 import useMessage from "../hooks/useMessage";
 
-export default function ChatSelected({ onPostChat }) {
+export default function ChatSelected({ onPostChat, onModifyChat }) {
   const { messages, getMessages, postMessage } = useMessage();
 
   return (
@@ -25,7 +25,12 @@ export default function ChatSelected({ onPostChat }) {
         </Switch>
       </div>
       <div className={styles.inputContainer}>
-        <InputMessage onPostMessage={postMessage} onPostChat={onPostChat} />
+        <InputMessage
+          onPostMessage={postMessage}
+          onPostChat={onPostChat}
+          onModifyChat={onModifyChat}
+          messages={messages}
+        />
       </div>
     </div>
   );
