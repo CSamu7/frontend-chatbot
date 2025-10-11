@@ -18,6 +18,14 @@ export default function useChat(user) {
     setChats(() => chats.filter((chat) => chat.id !== id_chat));
   };
 
+  const modifyChat = async (id_chat, newTitle) => {
+    await chatsService.patchChat(id_chat, newTitle);
+    const newChats = chats.map((chat) =>
+      chat.id === id_chat ? { ...chat, title: newTitle } : chat
+    );
+    setChats(newChats);
+  };
+
   const postChat = async (title) => {
     const id_user = localStorage.getItem("id");
     const chat = await chatsService.postChat(id_user, title);
@@ -28,5 +36,5 @@ export default function useChat(user) {
     return chat;
   };
 
-  return { chats, deleteChat, postChat };
+  return { chats, deleteChat, postChat, modifyChat };
 }

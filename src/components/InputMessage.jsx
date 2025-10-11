@@ -4,7 +4,12 @@ import { useContext, useState } from "react";
 import { useLocation } from "wouter";
 import { ErrorContext } from "../context/ErrorContext";
 
-export default function InputMessage({ onPostMessage, onPostChat }) {
+export default function InputMessage({
+  onPostMessage,
+  onPostChat,
+  onModifyChat,
+  messages,
+}) {
   const [isSending, setIsSending] = useState(false);
   const [text, setText] = useState("");
   const [location, navigate] = useLocation();
@@ -17,10 +22,16 @@ export default function InputMessage({ onPostMessage, onPostChat }) {
       setError("");
       setIsSending(true);
 
+      const shortTitle = `${text.slice(0, 47)}...`;
+
       if (location.includes("chat")) {
+        if (messages.length <= 0) {
+          onModifyChat(idChat, shortTitle);
+        }
+
         await onPostMessage(idChat, text);
       } else {
-        const newChat = await onPostChat("Nuevo chat");
+        const newChat = await onPostChat(shortTitle);
         await onPostMessage(newChat.id, text);
         navigate(`/chats/${newChat.id}`);
       }

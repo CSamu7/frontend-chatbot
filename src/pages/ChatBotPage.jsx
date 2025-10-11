@@ -12,10 +12,10 @@ import useChat from "../hooks/useChat";
 import { ErrorContext } from "../context/ErrorContext";
 
 export default function ChatBotPage() {
-  const [isLoginModalActive, setIsLoganModalActive] = useState(false);
+  const [isLoginModalActive, setIsLoginModalActive] = useState(false);
   const { user, logout } = useUser();
   const { setCsrf } = useAuth();
-  const { chats, deleteChat, postChat } = useChat(user);
+  const { chats, deleteChat, postChat, modifyChat } = useChat(user);
   const [error, setError] = useContext(ErrorContext);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function ChatBotPage() {
     <div className={styles.app}>
       <Header>
         <NavMenu
-          onLogin={() => setIsLoganModalActive(true)}
+          onLogin={() => setIsLoginModalActive(true)}
           onLogout={logout}
           user={user}
         ></NavMenu>
@@ -36,10 +36,13 @@ export default function ChatBotPage() {
         onDeleteChat={deleteChat}
         onPostChat={postChat}
       ></ChatsHistory>
-      <ChatSelected onPostChat={postChat}></ChatSelected>
+      <ChatSelected
+        onPostChat={postChat}
+        onModifyChat={modifyChat}
+      ></ChatSelected>
       {isLoginModalActive && (
         <LoginModal
-          closeModal={() => setIsLoganModalActive(false)}
+          closeModal={() => setIsLoginModalActive(false)}
         ></LoginModal>
       )}
       <ErrorPopup errorMsg={error}></ErrorPopup>
