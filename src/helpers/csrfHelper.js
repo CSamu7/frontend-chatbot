@@ -1,11 +1,15 @@
 const getCsrfCookie = () => {
-  const splitCookie = document.cookie.split("=");
+  const splitCookies = document.cookie
+    .split(";")
+    .map((cookie) => cookie.trim());
 
-  const indexCookie = splitCookie.findIndex((cookie) =>
+  const csrfIndex = splitCookies.findIndex((cookie) =>
     cookie.startsWith("csrf")
   );
 
-  return splitCookie[indexCookie + 1];
+  const csrfValue = splitCookies[csrfIndex].split("=")[1];
+
+  return csrfValue;
 };
 
 const createCsrfHeaders = () => {
