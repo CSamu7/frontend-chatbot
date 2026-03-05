@@ -6,7 +6,7 @@ import SignUp from "./pages/SignUp";
 function App() {
   return (
     <Switch>
-      <Route path="/home" component={ChatBotPage} nest></Route>
+      <Route path="/" component={ChatBotPage} nest></Route>
       <Route path="/signup" component={SignUp}></Route>
     </Switch>
   );

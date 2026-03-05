@@ -2,9 +2,17 @@ import { useEffect } from "react";
 import styles from "./ChatContent.module.css";
 
 export default function ChatContent({ idChat, messages, onMessages }) {
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    onMessages(idChat);
+    const loadMessages = async () => {
+      setIsLoading(true);
+      await onMessages(idChat);
+      setIsLoading(false);
+    };
+    loadMessages();
   }, [idChat]);
+
+  if (isLoading) return <div>Cargando mensajes...</div>;
 
   const messagesJSX = messages.map((msg, index) => (
     <div

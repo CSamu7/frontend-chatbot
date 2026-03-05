@@ -19,6 +19,7 @@ export default function NavMenu({ onLogin, onLogout, user }) {
         {user && (
           <li>
             <button
+              className={styles.menuLink}
               onClick={async () => {
                 await onLogout();
                 navigate("/");
