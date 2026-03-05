@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import Header from "../components/Header";
 import useUser from "../hooks/useUser";
 import styles from "./SignUp.module.css";
+import { navigate } from "wouter/use-hash-location";
 
 export default function SignUp() {
   const { registerUser } = useUser();
@@ -50,9 +51,9 @@ export default function SignUp() {
 
     try {
       await registerUser(user);
+      navigate("/home/");
     } catch (error) {
-      console.log(error);
-      setFormError(["Error en el registro. Intenta nuevamente."]);
+      setFormError(error.email);
     }
   };
 
@@ -74,21 +75,11 @@ export default function SignUp() {
           </div>
           <div>
             <label htmlFor="username">Nombre de usuario</label>
-            <input 
-              type="text" 
-              name="username" 
-              id="username" 
-              required 
-            />
+            <input type="text" name="username" id="username" required />
           </div>
           <div>
             <label htmlFor="password">Contraseña</label>
-            <input 
-              type="password" 
-              name="password" 
-              id="password" 
-              required 
-            />
+            <input type="password" name="password" id="password" required />
           </div>
           <div>
             <label htmlFor="confirm-password">Confirmar contraseña</label>

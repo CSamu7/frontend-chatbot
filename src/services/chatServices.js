@@ -28,22 +28,34 @@ const chatsService = {
     headers.append("Accept", "application/json");
     headers.set("Content-Type", "application/json");
 
-    const request = await fetch(
-      `${import.meta.env.VITE_USER_URL}${id_user}/chats/`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers,
-        body: JSON.stringify({
-          title,
-          user: id_user,
-        }),
-      }
-    );
+    const request = await fetch(`${import.meta.env.VITE_CHAT_URL}`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        title,
+        user: id_user,
+      }),
+      headers,
+    });
+
+    if (!request.ok) throw await request.json();
 
     const response = await request.json();
 
     return response;
+  },
+  patchChat: async (id_chat, newTitle) => {
+    const headers = createCsrfHeaders();
+
+    headers.append("Accept", "application/json");
+    headers.set("Content-Type", "application/json");
+
+    await fetch(`${import.meta.env.VITE_CHAT_URL}${id_chat}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers,
+      body: JSON.stringify({ title: newTitle }),
+    });
   },
 };
 

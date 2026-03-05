@@ -17,9 +17,9 @@ export default function NavMenu({ onLogin, onLogout, user }) {
           )}
         </li>
         {user && (
-          <li>
+          <li className={styles.menuItem}>
             <button
-              className={styles.menuLink}
+              className={styles.logoutBtn}
               onClick={async () => {
                 await onLogout();
                 navigate("/");

@@ -20,8 +20,6 @@ const messagesService = {
     headers.append("Accept", "application/json");
     headers.set("Content-Type", "application/json");
 
-    console.log(idUser);
-
     const request = await fetch(
       `${import.meta.env.VITE_CHAT_URL}${idChat}/messages/`,
       {
@@ -35,6 +33,8 @@ const messagesService = {
         credentials: "include",
       }
     );
+
+    if (!request.ok) throw request.json();
 
     const response = await request.json();
 

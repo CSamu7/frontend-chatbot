@@ -14,9 +14,7 @@ export default function useMessage() {
     const idUser = localStorage.getItem("id");
 
     await messagesService.postMessage(idChat, idUser, text);
-    const newMessages = await getMessages(idChat);
-
-    setMessages(newMessages.results);
+    await getMessages(idChat);
   };
 
   return { messages, getMessages, postMessage };

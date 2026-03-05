@@ -38,6 +38,7 @@
   border-radius: 10px;
   max-width: 70%;
   animation: fadeIn 0.3s ease;
+  word-break: break-all;
 }
 
 .ownMessage {
@@ -59,7 +60,6 @@
   opacity: 0.8;
   text-align: right;
 }
-
 
 .chat::-webkit-scrollbar {
   width: 8px;
