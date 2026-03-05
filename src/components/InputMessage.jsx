@@ -18,6 +18,7 @@ export default function InputMessage({
   const idChat = parseInt(location.split("/").at(-1));
 
   const handleSendMessage = async () => {
+    if (!text || !text.trim()) return;
     try {
       setError("");
       setIsSending(true);
@@ -54,7 +55,7 @@ export default function InputMessage({
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button className={styles.sendMsg} onClick={handleSendMessage}>
+      <button className={styles.sendMsg} onClick={handleSendMessage} disabled={isSending}>
         <img src={send_img} alt="Enviar mensaje" />
       </button>
     </div>

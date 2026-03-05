@@ -6,14 +6,13 @@ import { Link, useLocation } from "wouter";
 export default function LoginModal({ closeModal }) {
   const { login } = useUser();
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [location, navigate] = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    const email = e.target.email.value;
-    const password = e.target.password.value;
 
     try {
       await login(email, password);
@@ -34,12 +33,13 @@ export default function LoginModal({ closeModal }) {
         <h2>Inicia sesión</h2>
         <form id="form" onSubmit={handleSubmit}>
           <div>
-            <label>Correo electronico</label>
-            <input type="email" name="email" required />
+            <label htmlFor="email">Correo electronico</label>
+            <input
+              id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
           </div>
           <div>
-            <label>Contraseña</label>
-            <input type="password" name="password" required />
+            <label htmlFor="password">Contraseña</label>
+            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <a href="/signup">¿No estas registrado?</a>
           {error && <p>{error}</p>}
