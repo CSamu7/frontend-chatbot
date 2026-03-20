@@ -1,13 +1,13 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import ChatsHistory from './ChatsHistory';
+import ChatsHistory from '../components/ChatsHistory';
 import { ErrorContext } from '../context/ErrorContext';
 
 jest.mock('wouter', () => ({
   useLocation: jest.fn()
 }));
 
-jest.mock('./ChatItem', () => {
+jest.mock('../components/ChatItem', () => {
   return function MockChatItem({ id, title, date, onDeleteChat, onSetActiveChat }) {
     return (
       <div data-testid="mock-chat-item" data-id={id}>
@@ -20,7 +20,7 @@ jest.mock('./ChatItem', () => {
   };
 });
 
-jest.mock('./ChatsHistory.module.css', () => ({
+jest.mock('../components/ChatsHistory.module.css', () => ({
   pastConversations: 'pastConversations',
   header: 'header',
   createChatbtn: 'createChatbtn',

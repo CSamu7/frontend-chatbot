@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import InputMessage from './InputMessage';
+import InputMessage from '../components/InputMessage';
 import { ErrorContext } from '../context/ErrorContext';
 
 jest.mock('wouter', () => ({

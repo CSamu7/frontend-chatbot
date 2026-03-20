@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import LoginModal from './LoginModal';
+import LoginModal from '../components/LoginModal';
 
 jest.mock('../hooks/useUser', () => ({
   __esModule: true,

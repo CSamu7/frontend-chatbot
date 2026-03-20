@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import NavMenu from './NavMenu';
+import NavMenu from '../components/NavMenu';
 
 jest.mock('wouter', () => ({
   useLocation: jest.fn()

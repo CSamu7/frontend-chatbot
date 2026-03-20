@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import ChatItem from './ChatItem';
+import ChatItem from '../components/ChatItem';
 
 jest.mock('wouter', () => ({
   Link: ({ children, href }) => <a href={href}>{children}</a>,

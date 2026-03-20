@@ -4,6 +4,7 @@ import styles from "./ChatContent.module.css";
 export default function ChatContent({ idChat, messages, onMessages }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [copiedMessageId, setCopiedMessageId] = useState(null);
   
   useEffect(() => {
     const loadMessages = async () => {
@@ -22,6 +23,18 @@ export default function ChatContent({ idChat, messages, onMessages }) {
     loadMessages();
   }, [idChat, onMessages]);
 
+  const handleCopyMessage = async (text, index) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedMessageId(index);
+      setTimeout(() => {
+        setCopiedMessageId(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Error al copiar el mensaje:", error);
+    }
+  };
+
   if (isLoading) return <div>Cargando mensajes...</div>;
   
   if (error) return <div className={styles.error}>Error: {error}</div>;
@@ -33,7 +46,16 @@ export default function ChatContent({ idChat, messages, onMessages }) {
         msg.isUser ? styles.ownMessage : styles.botMessage
       }`}
     >
-      {msg.text}
+      <div className={styles.messageContent}>
+        <div className={styles.messageText}>{msg.text}</div>
+        <button
+          onClick={() => handleCopyMessage(msg.text, index)}
+          className={styles.copyButton}
+          title="Copiar mensaje"
+        >
+          {copiedMessageId === index ? "✓" : "📋"}
+        </button>
+      </div>
       <div className={styles.messageTime}>{msg.time}</div>
     </div>
   ));

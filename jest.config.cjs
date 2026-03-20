@@ -10,5 +10,9 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '/node_modules/(?!(wouter)/)'
+  ],
+  testMatch: [
+    '<rootDir>/src/tests/**/*.test.jsx',
+    '<rootDir>/src/**/*.test.jsx'
   ]
 };

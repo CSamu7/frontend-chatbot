@@ -4,8 +4,8 @@ import logo from "../assets/logo.png";
 export default function Logo() {
   return (
     <div className={styles.logo}>
-      <img src={logo} className={styles.logoImg}></img>
-      <a href="/home" className={styles.logoText}>
+      <img src={logo} className={styles.logoImg} alt="Logo de SamuBot"></img>
+      <a href="/" className={styles.logoText}>
         SamuBot
       </a>
     </div>

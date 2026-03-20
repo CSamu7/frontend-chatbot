@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import ChatContent from './ChatContent';
+import ChatContent from '../components/ChatContent';
 
 jest.mock('wouter', () => ({
   useLocation: () => ['/chats/123', jest.fn()]

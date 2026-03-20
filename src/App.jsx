@@ -8,7 +8,7 @@ function App() {
   return (
     <Switch>
       <ErrorDetailsProvider>
-        <Route path="/" component={ChatBotPage} nest></Route>
+        <Route path="/" component={ChatBotPage}></Route>
         <Route path="/signup" component={SignUp}></Route>
       </ErrorDetailsProvider>
     </Switch>
