@@ -1,3 +1,11 @@
+beforeAll(() => {
+  global.confirm = jest.fn(() => true);
+});
+
+afterAll(() => {
+  delete global.confirm;
+});
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import NavMenu from '../components/NavMenu';

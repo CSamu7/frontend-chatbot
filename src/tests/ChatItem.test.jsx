@@ -1,3 +1,11 @@
+beforeAll(() => {
+  global.confirm = jest.fn(() => true);
+});
+
+afterAll(() => {
+  delete global.confirm;
+});
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import ChatItem from '../components/ChatItem';
 
