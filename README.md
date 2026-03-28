@@ -1,12 +1,95 @@
-# React + Vite
+# SamuBot - Frontend Chatbot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación frontend para un chatbot interactivo que consulta libros de la biblioteca escolar, construida con React, Vite y CSS Modules. Permite gestionar conversaciones, enviar mensajes y autenticarse con el backend.
 
-Currently, two official plugins are available:
+## Tecnologías
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 18** - Biblioteca para interfaces de usuario
+- **Vite** - Herramienta de construcción rápida
+- **Wouter** - Enrutamiento ligero para React
+- **CSS Modules** - Estilos encapsulados por componente
+- **Jest + Testing Library** - Pruebas unitarias
 
-## Expanding the ESLint configuration
+## Estructura del Proyecto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+frontend-chatbot/
+├── public/                  # Archivos estáticos
+├── src/
+│   ├── assets/              # Imágenes e íconos
+│   ├── components/          # Componentes React
+│   ├── helpers/             # Funciones auxiliares
+│   ├── hooks/               # Custom hooks
+│   ├── pages/               # Páginas principales
+│   ├── services/            # Servicios API
+│   ├── tests/               # Pruebas unitarias
+│   ├── App.jsx              # Componente principal
+│   ├── main.jsx             # Punto de entrada
+│   └── index.css            # Estilos globales
+├── .env.example
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+## Instalación
+
+```bash
+# Instalar dependencias
+npm install
+
+# Copiar variables de entorno
+cp .env.example .env
+
+# Iniciar servidor de desarrollo
+npm run dev
+```
+
+## Variables de Entorno
+
+Crear archivo `.env` con las siguientes variables:
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+## Pruebas
+
+```bash
+# Ejecutar todas las pruebas
+npm test
+
+# Cobertura de pruebas
+npm run test:coverage
+```
+
+**Resultados:** 112 pruebas | 19 suites | 100% pasando
+
+## Rutas
+
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Página principal del chatbot |
+| `/signup` | Registro de nuevos usuarios |
+
+## Componentes Principales
+
+| Componente | Descripción |
+|------------|-------------|
+| `ChatBotPage` | Layout principal del chatbot |
+| `ChatsHistory` | Listado de conversaciones pasadas |
+| `ChatSelected` | Área de chat activo |
+| `ChatContent` | Visualización de mensajes con animaciones |
+| `InputMessage` | Campo de entrada de mensajes |
+| `LoginModal` | Modal de inicio de sesión |
+| `NavMenu` | Menú de navegación y autenticación |
+| `ConfirmDialog` | Diálogo de confirmación para acciones destructivas |
+
+## Hooks Personalizados
+
+| Hook | Propósito |
+|------|-----------|
+| `useChat` | CRUD de conversaciones |
+| `useMessage` | Envío y obtención de mensajes |
+| `useUser` | Autenticación (login, logout, registro) |
+| `useAuth` | Manejo de tokens CSRF |
