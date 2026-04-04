@@ -1,55 +1,58 @@
+import { createCsrfHeaders } from "../helpers/csrfHelper";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 const userServices = {
+  getCsrf: async () => {
+    const response = await fetch(`${API_URL}/get_csrf/`, {
+      credentials: "include",
+    });
+    return response.json();
+  },
+  
+  register: async (userData) => {
+    const response = await fetch(`${API_URL}/users/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+      credentials: "include",
+    });
+    if (!response.ok) throw await response.json();
+    return response.json();
+  },
+  
+  // 👈 AGREGAR ESTA FUNCIÓN
+  registerUser: async (userData) => {
+    return userServices.register(userData);
+  },
+  
   login: async (email, password) => {
-    const request = await fetch(import.meta.env.VITE_LOGIN_URL, {
+    const response = await fetch(`${API_URL}/login/`, {
       method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-
-    if (!request.ok) throw await request.json();
-
-    const response = await request.json();
-
-    return response;
-  },
-
-  getUser: async () => {
-    const request = await fetch(`${import.meta.env.VITE_USER_DATA_URL}`, {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
       credentials: "include",
     });
-
-    if (!request.ok) throw request;
-
-    const response = await request.json();
-
-    return response;
+    if (!response.ok) throw await response.json();
+    return response.json();
   },
-
+  
   logout: async () => {
-    const request = await fetch(`${import.meta.env.VITE_API_URL}/logout/`, {
+    const headers = createCsrfHeaders();
+    await fetch(`${API_URL}/logout/`, {
+      method: "POST",
+      credentials: "include",
+      headers,
+    });
+  },
+  
+  getUser: async () => {
+    const response = await fetch(`${API_URL}/whoami/`, {
       credentials: "include",
     });
-
-    if (!request.ok) throw request;
-  },
-
-  registerUser: async (user) => {
-    const request = await fetch(`${import.meta.env.VITE_USER_URL}`, {
-      method: "POST",
-      body: JSON.stringify(user),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-
-    if (!request.ok) throw await request.json();
-  },
+    if (!response.ok) return null;
+    return response.json();
+  }
 };
 
 export { userServices };

@@ -8,13 +8,12 @@ export default function useUser() {
     const idUser = localStorage.getItem("id");
 
     const getUser = async () => {
-      const user = await userServices.getUser();
-
-      setUser(user);
+      const userData = await userServices.getUser();
+      setUser(userData);
     };
 
     if (!user && idUser) getUser();
-  });
+  }, []);
 
   const registerUser = async (user) => {
     await userServices.registerUser(user);
@@ -27,7 +26,7 @@ export default function useUser() {
   };
 
   const logout = async () => {
-    localStorage.clear("");
+    localStorage.clear();
     setUser(null);
     await userServices.logout();
   };

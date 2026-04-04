@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
+import { useLocation } from "wouter";
 import Header from "../components/Header";
 import useUser from "../hooks/useUser";
 import styles from "./SignUp.module.css";
-import { navigate } from "wouter/use-hash-location";
 
 export default function SignUp() {
   const { registerUser } = useUser();
   const [formError, setFormError] = useState([]);
   const form = useRef();
+  const [, navigate] = useLocation();
 
   const validateForm = (form) => {
     const email = form.get("email");
@@ -51,9 +52,25 @@ export default function SignUp() {
 
     try {
       await registerUser(user);
-      navigate("/home/");
+      navigate("/");
     } catch (error) {
-      setFormError(error.email);
+      console.error("Error en registro:", error);
+      
+      if (error && typeof error === 'object') {
+        if (error.email) {
+          setFormError([error.email]);
+        } else if (error.message) {
+          setFormError([error.message]);
+        } else if (error.non_field_errors) {
+          setFormError(error.non_field_errors);
+        } else {
+          setFormError(["Error al registrar usuario. Intenta de nuevo."]);
+        }
+      } else if (typeof error === 'string') {
+        setFormError([error]);
+      } else {
+        setFormError(["Error al registrar usuario. Intenta de nuevo."]);
+      }
     }
   };
 

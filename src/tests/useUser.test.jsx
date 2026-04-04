@@ -1,19 +1,17 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import useUser from '../hooks/useUser';
 
-const mockGetUser = jest.fn();
-const mockRegisterUser = jest.fn();
-const mockLogin = jest.fn();
-const mockLogout = jest.fn();
-
+// Mock completo del módulo userServices
 jest.mock('../services/userServices', () => ({
   userServices: {
-    getUser: (...args) => mockGetUser(...args),
-    registerUser: (...args) => mockRegisterUser(...args),
-    login: (...args) => mockLogin(...args),
-    logout: (...args) => mockLogout(...args),
+    getUser: jest.fn(),
+    registerUser: jest.fn(),
+    login: jest.fn(),
+    logout: jest.fn(),
   }
 }));
+
+import { userServices } from '../services/userServices';
 
 describe('useUser', () => {
   beforeEach(() => {
@@ -29,12 +27,12 @@ describe('useUser', () => {
   test('carga usuario desde localStorage al montar', async () => {
     const mockUser = { id: '1', username: 'testuser', email: 'test@example.com' };
     localStorage.setItem('id', '1');
-    mockGetUser.mockResolvedValue(mockUser);
+    userServices.getUser.mockResolvedValue(mockUser);
 
     const { result } = renderHook(() => useUser());
 
     await waitFor(() => {
-      expect(mockGetUser).toHaveBeenCalled();
+      expect(userServices.getUser).toHaveBeenCalled();
       expect(result.current.user).toEqual(mockUser);
     });
   });
@@ -43,12 +41,12 @@ describe('useUser', () => {
     localStorage.removeItem('id');
     renderHook(() => useUser());
     
-    expect(mockGetUser).not.toHaveBeenCalled();
+    expect(userServices.getUser).not.toHaveBeenCalled();
   });
 
   test('login exitoso guarda usuario y token', async () => {
     const mockResponse = { id: '1', username: 'testuser', email: 'test@example.com' };
-    mockLogin.mockResolvedValue(mockResponse);
+    userServices.login.mockResolvedValue(mockResponse);
 
     const { result } = renderHook(() => useUser());
 
@@ -56,7 +54,7 @@ describe('useUser', () => {
       await result.current.login('test@example.com', 'password123');
     });
 
-    expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'password123');
+    expect(userServices.login).toHaveBeenCalledWith('test@example.com', 'password123');
     expect(localStorage.getItem('id')).toBe('1');
     expect(result.current.user).toEqual(mockResponse);
   });
@@ -64,11 +62,11 @@ describe('useUser', () => {
   test('logout limpia usuario y localStorage', async () => {
     const mockUser = { id: '1', username: 'testuser' };
     localStorage.setItem('id', '1');
-    mockLogout.mockResolvedValue();
+    userServices.logout.mockResolvedValue();
+    userServices.login.mockResolvedValue(mockUser);
     
     const { result } = renderHook(() => useUser());
 
-    mockLogin.mockResolvedValue(mockUser);
     await act(async () => {
       await result.current.login('test@example.com', 'pass');
     });
@@ -77,14 +75,14 @@ describe('useUser', () => {
       await result.current.logout();
     });
 
-    expect(mockLogout).toHaveBeenCalled();
+    expect(userServices.logout).toHaveBeenCalled();
     expect(localStorage.getItem('id')).toBeNull();
     expect(result.current.user).toBeNull();
   });
 
   test('registerUser llama al servicio', async () => {
     const newUser = { email: 'new@example.com', username: 'newuser', password: 'pass123' };
-    mockRegisterUser.mockResolvedValue();
+    userServices.registerUser.mockResolvedValue();
 
     const { result } = renderHook(() => useUser());
 
@@ -92,6 +90,6 @@ describe('useUser', () => {
       await result.current.registerUser(newUser);
     });
 
-    expect(mockRegisterUser).toHaveBeenCalledWith(newUser);
+    expect(userServices.registerUser).toHaveBeenCalledWith(newUser);
   });
 });
