@@ -1,4 +1,4 @@
-# SamuBot - Frontend Chatbot
+# BookBot - Frontend Chatbot
 
 Aplicación frontend para un chatbot interactivo que consulta libros de la biblioteca escolar, construida con React, Vite y CSS Modules. Permite gestionar conversaciones, enviar mensajes y autenticarse con el backend.
 

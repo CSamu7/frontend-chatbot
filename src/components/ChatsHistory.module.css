@@ -2,11 +2,11 @@
   grid-area: history;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background-color: #f7f3ed;
+  gap: 1rem;
+  background: var(--bg-sidebar);
   width: 100%;
-  padding: 1rem;
-  border-right: 1px solid #ccc;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid var(--border-color);
   height: 100%;
   overflow-y: auto;
 }
@@ -14,19 +14,63 @@
 .header {
   display: flex;
   align-items: center;
-  border-bottom: 1.5px solid #ccc;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .createChatbtn {
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.createChatbtn:hover {
+  transform: rotate(90deg) scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.buttonText {
+  display: none;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
 }
 
 .title {
-  color: #000;
+  color: var(--text-primary);
   font-size: 1.4rem;
+  font-weight: 600;
+  background: var(--primary-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .messageNotChats {
-  color: #000;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .pastConversations {
+    border-right: none;
+    border-top: 1px solid var(--border-color);
+    height: auto;
+    max-height: 200px;
+  }
 }

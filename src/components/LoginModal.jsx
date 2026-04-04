@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import useUser from "../hooks/useUser";
 import styles from "./LoginModal.module.css";
 import { Link, useLocation } from "wouter";
+import { ErrorContext } from "../context/ErrorContext";
 
 export default function LoginModal({ closeModal }) {
   const { login } = useUser();
-  const [error, setError] = useState("");
+  const [error, setError] = useContext(ErrorContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [location, navigate] = useLocation();
@@ -18,7 +19,7 @@ export default function LoginModal({ closeModal }) {
       await login(email, password);
       closeModal();
     } catch (error) {
-      setError(error.error);
+      setError(error.error || "Error al iniciar sesión");
     }
   };
 

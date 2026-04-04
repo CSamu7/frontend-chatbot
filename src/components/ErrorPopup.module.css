@@ -1,17 +1,23 @@
 .dialog {
-  position: absolute;
-  left: 40vw;
-  top: 40vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0;
+  width: 90%;
+  max-width: 400px;
+  background: white;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: fadeInScale 0.2s ease-out;
+  z-index: 1000;
+}
 
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  width: 300px;
-  background-color: red;
-  color: white;
-  border: 0;
-  padding: 20px;
+.dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
 }
 
 .invisible {
@@ -22,26 +28,65 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #fef2f2;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title::before {
+  content: "⚠️";
+  font-size: 1.25rem;
 }
 
 .closeBtn {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #f7f3ed;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: none;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #9ca3af;
   cursor: pointer;
-
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 0;
+  transition: all 0.2s ease;
 }
 
-.title {
-  text-align: center;
-  font-size: 1.6rem;
+.closeBtn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
 }
 
 .message {
-  font-size: 1.2rem;
+  padding: 1.5rem;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #374151;
+  background-color: white;
+  border-radius: 0 0 1rem 1rem;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }

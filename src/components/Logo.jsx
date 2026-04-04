@@ -6,7 +6,7 @@ export default function Logo() {
     <div className={styles.logo}>
       <img src={logo} className={styles.logoImg} alt="Logo de SamuBot"></img>
       <a href="/" className={styles.logoText}>
-        SamuBot
+        BookBot
       </a>
     </div>
   );

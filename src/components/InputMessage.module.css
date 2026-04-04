@@ -1,63 +1,83 @@
 .formAsk {
   display: flex;
   align-items: center;
-  background-color: #faf9f6;
-  padding: 1rem;
+  background: var(--bg-secondary);
+  padding: 1rem 1.5rem;
   justify-content: center;
   width: 100%;
+  border-top: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
 }
 
 .formInput {
   flex: 1;
-  padding: 1rem;
+  padding: 0.875rem 1.25rem;
   border-radius: 2rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   margin-right: 1rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-family: inherit;
   resize: none;
-  min-height: 20px;
+  min-height: 44px;
   max-height: 150px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .sendMsg {
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 2rem;
-  background-color: #333;
-  color: #faf9f6;
+  background: var(--primary-gradient);
+  color: white;
   border: none;
   font-weight: bold;
   cursor: pointer;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .sendMsg:hover {
-  background-color: #555;
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 .sendMsg img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
 }
 
 @media (max-width: 768px) {
   .formAsk {
-    padding: 0.5rem;
+    padding: 0.75rem;
   }
 
   .formInput {
-    margin-right: 0.5rem;
-    padding: 0.8rem;
+    margin-right: 0.75rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
   }
 
   .sendMsg {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     padding: 0.5rem;
+  }
+  
+  .sendMsg img {
+    width: 18px;
+    height: 18px;
   }
 }

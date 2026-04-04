@@ -13,7 +13,7 @@ export default function InputMessage({
   const [isSending, setIsSending] = useState(false);
   const [text, setText] = useState("");
   const [location, navigate] = useLocation();
-  const [_, setError] = useContext(ErrorContext);
+  const [, setError] = useContext(ErrorContext);
 
   const idChat = parseInt(location.split("/").at(-1));
 
@@ -37,7 +37,7 @@ export default function InputMessage({
         navigate(`/chats/${newChat.id}`);
       }
     } catch (error) {
-      setError(error.detail);
+      setError("Error al enviar mensaje. Intenta de nuevo.");
     } finally {
       setIsSending(false);
       setText("");

@@ -1,49 +1,53 @@
 .chatItem {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
   padding: 0.7rem 1rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   text-decoration: none;
-
   display: flex;
   justify-content: space-between;
   gap: 10px;
   align-items: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .chatItem:hover {
-  background-color: #ddd;
+  transform: translateX(4px);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #fafafa 0%, #f8fafc 100%);
 }
 
 .title {
   margin: 0 0 0.25rem 0;
-  font-size: 1rem;
-  color: #000;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
   word-break: break-all;
 }
 
 .date {
   margin: 0;
-  font-size: 0.8rem;
-  color: #666;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
 }
 
 .btnDelete {
   border: 0;
-  background-color: red;
-  padding: 10px;
-  border-radius: 5px;
-  color: white;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .pastConversations {
-    border-right: none;
-    border-top: 1px solid #ccc;
-    height: auto;
-    max-height: 200px;
-  }
+.btnDelete:hover {
+  background: #dc2626;
+  color: white;
+  transform: scale(1.05);
 }
