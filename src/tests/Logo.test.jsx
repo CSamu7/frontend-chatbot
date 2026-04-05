@@ -22,7 +22,7 @@ describe('Logo', () => {
   test('renderiza el texto con enlace', () => {
     render(<Logo />);
     
-    const logoLink = screen.getByText('SamuBot');
+    const logoLink = screen.getByText('BookBot');
     expect(logoLink).toBeInTheDocument();
     expect(logoLink).toHaveClass('logoText');
     expect(logoLink).toHaveAttribute('href', '/');
@@ -31,7 +31,7 @@ describe('Logo', () => {
   test('aplica la clase logo al contenedor principal', () => {
     render(<Logo />);
     
-    const container = screen.getByText('SamuBot').parentElement;
+    const container = screen.getByText('BookBot').parentElement;
     expect(container).toHaveClass('logo');
   });
 

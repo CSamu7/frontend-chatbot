@@ -174,7 +174,7 @@ describe('InputMessage', () => {
       fireEvent.change(textarea, { target: { value: messageText } });
       fireEvent.click(sendButton);
       await waitFor(() => {
-        expect(mockSetError).toHaveBeenCalledWith('Error al enviar mensaje');
+        expect(mockSetError).toHaveBeenCalledWith('Error al enviar mensaje. Intenta de nuevo.');
       });
       expect(textarea.value).toBe('');
     });

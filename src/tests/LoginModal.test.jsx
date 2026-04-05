@@ -39,9 +39,9 @@ describe('LoginModal', () => {
     render(<LoginModal closeModal={mockCloseModal} />);
 
     expect(screen.getByText('Inicia sesión')).toBeInTheDocument();
-    expect(screen.getByLabelText('Correo electronico')).toBeInTheDocument();
+    expect(screen.getByLabelText('Correo electrónico')).toBeInTheDocument();
     expect(screen.getByLabelText('Contraseña')).toBeInTheDocument();
-    expect(screen.getByText('¿No estas registrado?')).toBeInTheDocument();
+    expect(screen.getByText('¿No estás registrado?')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Iniciar sesión')).toBeInTheDocument();
   });
 
@@ -62,7 +62,7 @@ describe('LoginModal', () => {
   test('Llama a login con email y password cuando se envía el formulario', async () => {
     mockLogin.mockResolvedValue();
     render(<LoginModal closeModal={mockCloseModal} />);
-    const emailInput = screen.getByLabelText('Correo electronico');
+    const emailInput = screen.getByLabelText('Correo electrónico');
     const passwordInput = screen.getByLabelText('Contraseña');
     const submitButton = screen.getByDisplayValue('Iniciar sesión');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -78,7 +78,7 @@ describe('LoginModal', () => {
     const errorMessage = 'Credenciales inválidas';
     mockLogin.mockRejectedValue({ error: errorMessage });
     render(<LoginModal closeModal={mockCloseModal} />);
-    const emailInput = screen.getByLabelText('Correo electronico');
+    const emailInput = screen.getByLabelText('Correo electrónico');
     const passwordInput = screen.getByLabelText('Contraseña');
     const submitButton = screen.getByDisplayValue('Iniciar sesión');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -95,7 +95,7 @@ describe('LoginModal', () => {
     mockLogin.mockResolvedValueOnce();
 
     render(<LoginModal closeModal={mockCloseModal} />);
-    const emailInput = screen.getByLabelText('Correo electronico');
+    const emailInput = screen.getByLabelText('Correo electrónico');
     const passwordInput = screen.getByLabelText('Contraseña');
     const submitButton = screen.getByDisplayValue('Iniciar sesión');
 
@@ -116,13 +116,13 @@ describe('LoginModal', () => {
 
   test('el enlace de registro apunta a /signup', () => {
     render(<LoginModal closeModal={mockCloseModal} />);
-    const registerLink = screen.getByText('¿No estas registrado?');
+    const registerLink = screen.getByText('¿No estás registrado?');
     expect(registerLink).toHaveAttribute('href', '/signup');
   });
 
   test('los campos son requeridos', () => {
     render(<LoginModal closeModal={mockCloseModal} />);
-    const emailInput = screen.getByLabelText('Correo electronico');
+    const emailInput = screen.getByLabelText('Correo electrónico');
     const passwordInput = screen.getByLabelText('Contraseña');
     expect(emailInput).toBeRequired();
     expect(passwordInput).toBeRequired();
@@ -130,7 +130,7 @@ describe('LoginModal', () => {
 
   test('el input de email es de tipo email', () => {
     render(<LoginModal closeModal={mockCloseModal} />);
-    const emailInput = screen.getByLabelText('Correo electronico');
+    const emailInput = screen.getByLabelText('Correo electrónico');
     expect(emailInput).toHaveAttribute('type', 'email');
   });
 

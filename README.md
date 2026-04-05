@@ -63,7 +63,7 @@ npm test
 npm run test:coverage
 ```
 
-**Resultados:** 112 pruebas | 19 suites | 100% pasando
+**Resultados:** 111 pruebas | 19 suites | 100% pasando
 
 ## Rutas
 

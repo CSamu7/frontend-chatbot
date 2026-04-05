@@ -11,6 +11,15 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!(wouter)/)'
   ],
+  globals: {
+    'import.meta': {
+      env: {
+        VITE_API_URL: 'http://localhost:8000/api',
+        VITE_USER_URL: 'http://localhost:8000/api/user/',
+        VITE_CHAT_URL: 'http://localhost:8000/api/chats/'
+      }
+    }
+  },
   testMatch: [
     '<rootDir>/src/tests/**/*.test.jsx',
     '<rootDir>/src/**/*.test.jsx'

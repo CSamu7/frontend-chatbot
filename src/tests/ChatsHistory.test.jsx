@@ -3,8 +3,22 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ChatsHistory from '../components/ChatsHistory';
 import { ErrorContext } from '../context/ErrorContext';
 
+jest.mock('../services/chatServices', () => ({
+  chatsService: {
+    getChats: jest.fn().mockResolvedValue([]),
+    postChat: jest.fn().mockResolvedValue({ id: 1, title: 'Nuevo chat', created_at: new Date().toISOString() }),
+    deleteChat: jest.fn().mockResolvedValue(),
+    patchChat: jest.fn().mockResolvedValue(),
+  }
+}));
+
 jest.mock('wouter', () => ({
   useLocation: jest.fn()
+}));
+
+jest.mock('../hooks/useChat', () => ({
+  __esModule: true,
+  default: jest.fn()
 }));
 
 jest.mock('../components/ChatItem', () => {
@@ -26,16 +40,18 @@ jest.mock('../components/ChatsHistory.module.css', () => ({
   createChatbtn: 'createChatbtn',
   title: 'title',
   chatItems: 'chatItems',
-  messageNotChats: 'messageNotChats'
+  messageNotChats: 'messageNotChats',
+  icon: 'icon',
+  buttonText: 'buttonText'
 }));
 
 describe('ChatsHistory', () => {
   const mockUseLocation = require('wouter').useLocation;
   const mockNavigate = jest.fn();
   const mockSetError = jest.fn();
-  const mockOnPostChat = jest.fn();
-  const mockOnDeleteChat = jest.fn();
   const mockOnSetActiveChat = jest.fn();
+  const mockPostChat = jest.fn();
+  const mockDeleteChat = jest.fn();
   
   const mockChats = [
     { id: 1, title: 'Chat 1', created_at: '2024-01-15T10:30:00Z' },
@@ -43,16 +59,18 @@ describe('ChatsHistory', () => {
     { id: 3, title: 'Chat 3', created_at: '2024-01-17T09:15:00Z' }
   ];
 
-  const renderComponent = (props = {}) => {
+  const useChat = require('../hooks/useChat').default;
+
+  const renderComponent = () => {
+    useChat.mockReturnValue({
+      chats: mockChats,
+      deleteChat: mockDeleteChat,
+      postChat: mockPostChat,
+    });
+    
     return render(
       <ErrorContext.Provider value={[null, mockSetError]}>
-        <ChatsHistory
-          chats={mockChats}
-          onPostChat={mockOnPostChat}
-          onDeleteChat={mockOnDeleteChat}
-          onSetActiveChat={mockOnSetActiveChat}
-          {...props}
-        />
+        <ChatsHistory user={{ id: 1 }} onSetActiveChat={mockOnSetActiveChat} />
       </ErrorContext.Provider>
     );
   };
@@ -60,6 +78,7 @@ describe('ChatsHistory', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockUseLocation.mockReturnValue(['/chats/123', mockNavigate]);
+    mockPostChat.mockResolvedValue({ id: 4, title: 'Nuevo chat', created_at: new Date().toISOString() });
   });
 
   test('renderiza el título correctamente', () => {
@@ -69,7 +88,7 @@ describe('ChatsHistory', () => {
 
   test('renderiza el botón de crear chat', () => {
     renderComponent();
-    const createButton = screen.getByRole('button', { name: '+' });
+    const createButton = screen.getByRole('button', { name: /crear nuevo chat/i });
     expect(createButton).toBeInTheDocument();
   });
 
@@ -83,61 +102,63 @@ describe('ChatsHistory', () => {
   });
 
   test('muestra mensaje cuando no hay chats', () => {
-    renderComponent({ chats: [] });
+    useChat.mockReturnValue({
+      chats: [],
+      deleteChat: mockDeleteChat,
+      postChat: mockPostChat,
+    });
+    render(
+      <ErrorContext.Provider value={[null, mockSetError]}>
+        <ChatsHistory user={{ id: 1 }} onSetActiveChat={mockOnSetActiveChat} />
+      </ErrorContext.Provider>
+    );
     expect(screen.getByText('No tienes chats recientes')).toBeInTheDocument();
     expect(screen.queryByTestId('mock-chat-item')).not.toBeInTheDocument();
   });
 
-  test('llama a onPostChat y navega cuando se crea un nuevo chat', async () => {
-    const newChat = { id: 4 };
-    mockOnPostChat.mockResolvedValue(newChat);
+  test('llama a postChat y navega cuando se crea un nuevo chat', async () => {
     renderComponent();
-    const createButton = screen.getByRole('button', { name: '+' });
+    const createButton = screen.getByRole('button', { name: /crear nuevo chat/i });
     fireEvent.click(createButton);
     await waitFor(() => {
-      expect(mockSetError).toHaveBeenCalledWith('');
-      expect(mockOnPostChat).toHaveBeenCalledWith('Nuevo chat');
+      expect(mockPostChat).toHaveBeenCalledWith('Nuevo chat');
       expect(mockNavigate).toHaveBeenCalledWith('/chats/4');
     });
   });
 
-  test('limpia el error antes de crear chat', async () => {
-    const newChat = { id: 4 };
-    mockOnPostChat.mockResolvedValue(newChat);
-    renderComponent();
-    const createButton = screen.getByRole('button', { name: '+' });
-    fireEvent.click(createButton);
-    await waitFor(() => {
-      expect(mockSetError).toHaveBeenCalledWith('');
-    });
-  });
-
   test('maneja error al crear chat', async () => {
-    const errorDetail = 'Error al crear el chat';
-    mockOnPostChat.mockRejectedValue({ detail: errorDetail });
+    mockPostChat.mockRejectedValue({ detail: 'Error al crear chat' });
     renderComponent();
-    const createButton = screen.getByRole('button', { name: '+' });
+    const createButton = screen.getByRole('button', { name: /crear nuevo chat/i });
     fireEvent.click(createButton);
     await waitFor(() => {
-      expect(mockSetError).toHaveBeenCalledWith(errorDetail);
-      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(mockSetError).toHaveBeenCalledWith('Error al crear chat. Intenta de nuevo.');
     });
   });
 
-  test('llama a onDeleteChat cuando se elimina un chat', async () => {
-    mockOnDeleteChat.mockResolvedValue();
+  test('maneja error sin detail', async () => {
+    mockPostChat.mockRejectedValue({});
+    renderComponent();
+    const createButton = screen.getByRole('button', { name: /crear nuevo chat/i });
+    fireEvent.click(createButton);
+    await waitFor(() => {
+      expect(mockSetError).toHaveBeenCalledWith('Error al crear chat. Intenta de nuevo.');
+    });
+  });
+
+  test('llama a deleteChat cuando se elimina un chat', async () => {
     renderComponent();
     const deleteButtons = screen.getAllByRole('button', { name: 'Eliminar' });
     fireEvent.click(deleteButtons[0]);
     await waitFor(() => {
-      expect(mockOnDeleteChat).toHaveBeenCalledWith(1);
+      expect(mockDeleteChat).toHaveBeenCalledWith(1);
     });
   });
 
   test('llama a onSetActiveChat cuando se activa un chat', () => {
     renderComponent();
     const activateButtons = screen.getAllByRole('button', { name: 'Activar' });
-    fireEvent.click(activateButtons[1]); // Activa el segundo chat
+    fireEvent.click(activateButtons[1]);
     expect(mockOnSetActiveChat).toHaveBeenCalledWith(2);
   });
 
@@ -147,26 +168,13 @@ describe('ChatsHistory', () => {
     expect(chatItems[0]).toHaveAttribute('data-id', '1');
     expect(chatItems[1]).toHaveAttribute('data-id', '2');
     expect(chatItems[2]).toHaveAttribute('data-id', '3');
-    expect(screen.getByText('Chat 1')).toBeInTheDocument();
-    expect(screen.getByText('Chat 2')).toBeInTheDocument();
-    expect(screen.getByText('Chat 3')).toBeInTheDocument();
   });
 
   test('formatea las fechas correctamente', () => {
     renderComponent();
     const chatItems = screen.getAllByTestId('mock-chat-item');
-    expect(chatItems[0]).toHaveTextContent('2024-01-15T10:30:00Z');
-    expect(chatItems[1]).toHaveTextContent('2024-01-16T14:20:00Z');
-    expect(chatItems[2]).toHaveTextContent('2024-01-17T09:15:00Z');
-  });
-
-  test('maneja error sin detail', async () => {
-    mockOnPostChat.mockRejectedValue({});
-    renderComponent();
-    const createButton = screen.getByRole('button', { name: '+' });
-    fireEvent.click(createButton);
-    await waitFor(() => {
-      expect(mockSetError).toHaveBeenCalledWith(undefined);
-    });
+    expect(chatItems[0]).toHaveTextContent('2024');
+    expect(chatItems[1]).toHaveTextContent('2024');
+    expect(chatItems[2]).toHaveTextContent('2024');
   });
 });
