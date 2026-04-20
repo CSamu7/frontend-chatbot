@@ -1,10 +1,10 @@
 import { useState, useContext } from "react";
-import useUser from "../hooks/useUser";
+import { useUserContext } from "../context/UserContext";
 import styles from "./LoginModal.module.css";
 import { ErrorContext } from "../context/ErrorContext";
 
 export default function LoginModal({ closeModal }) {
-  const { login } = useUser();
+  const { login } = useUserContext();
   const [error, setError] = useState("");
   const { setError: setGlobalError } = useContext(ErrorContext) || {};
 
@@ -20,7 +20,7 @@ export default function LoginModal({ closeModal }) {
       await login(email, password);
       closeModal();
     } catch (error) {
-      const errorMsg = error.error || "Error al iniciar sesión";
+      const errorMsg = error.message || "Error al iniciar sesión";
       setError(errorMsg);
       if (setGlobalError) setGlobalError(errorMsg);
     }

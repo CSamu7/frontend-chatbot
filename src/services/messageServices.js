@@ -11,32 +11,32 @@ const messagesService = {
       }
     );
 
-    if (!request.ok) throw { status: request.status, text: request.statusText };
+    if (!request.ok) {
+      const error = await request.json();
+      throw new Error(error.detail || 'Error al obtener los mensajes');
+    }
 
     const response = await request.json();
     return response;
   },
   
-  postMessage: async (idChat, idUser, text) => {
+  postMessage: async (idChat, text) => {
     const headers = createCsrfHeaders();
-    headers.append("Accept", "application/json");
-    headers.set("Content-Type", "application/json");
 
     const request = await fetch(
-      `${API_URL}/chats/${idChat}/messages/`,
+      `${API_URL}/chats/${idChat}/messages/post/`,
       {
         method: "POST",
-        body: JSON.stringify({
-          user: parseInt(idUser),
-          text,
-          chat: idChat,
-        }),
+        body: JSON.stringify({ text }),
         headers,
         credentials: "include",
       }
     );
 
-    if (!request.ok) throw request.json();
+    if (!request.ok) {
+      const error = await request.json();
+      throw new Error(error.detail || 'Error al enviar el mensaje');
+    }
 
     const response = await request.json();
     return response;

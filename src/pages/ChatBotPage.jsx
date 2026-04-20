@@ -4,18 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import styles from "./ChatBotPage.module.css";
 import LoginModal from "../components/LoginModal";
 import NavMenu from "../components/NavMenu";
-import useUser from "../hooks/useUser";
+import { useUserContext } from "../context/UserContext";
 import useAuth from "../hooks/useAuth";
 import Header from "../components/Header";
 import ErrorPopup from "../components/ErrorPopup";
-import useChat from "../hooks/useChat";
 import { ErrorContext } from "../context/ErrorContext";
 
 export default function ChatBotPage() {
   const [isLoginModalActive, setIsLoginModalActive] = useState(false);
-  const { user, logout } = useUser();
+  const { user, logout } = useUserContext();
   const { setCsrf } = useAuth();
-  const { chats, deleteChat, postChat, modifyChat } = useChat(user);
   const [error, setError] = useContext(ErrorContext);
 
   useEffect(() => {
@@ -29,23 +27,16 @@ export default function ChatBotPage() {
           onLogin={() => setIsLoginModalActive(true)}
           onLogout={logout}
           user={user}
-        ></NavMenu>
+        />
       </Header>
       <ChatsHistory
-        chats={chats}
-        onDeleteChat={deleteChat}
-        onPostChat={postChat}
-      ></ChatsHistory>
-      <ChatSelected
-        onPostChat={postChat}
-        onModifyChat={modifyChat}
-      ></ChatSelected>
+        user={user}
+      />
+      <ChatSelected />
       {isLoginModalActive && (
-        <LoginModal
-          closeModal={() => setIsLoginModalActive(false)}
-        ></LoginModal>
+        <LoginModal closeModal={() => setIsLoginModalActive(false)} />
       )}
-      <ErrorPopup errorMsg={error}></ErrorPopup>
+      <ErrorPopup errorMsg={error} />
     </div>
   );
 }

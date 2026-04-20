@@ -66,6 +66,13 @@
   font-style: italic;
 }
 
+.loginPrompt {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 2rem 1rem;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .pastConversations {
     border-right: none;

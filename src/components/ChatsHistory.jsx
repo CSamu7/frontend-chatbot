@@ -5,7 +5,7 @@ import styles from "./ChatsHistory.module.css";
 import { useContext } from "react";
 import { ErrorContext } from "../context/ErrorContext";
 
-export default function ChatsHistory({ user, onSetActiveChat }) {
+export default function ChatsHistory({ user }) {
   const { chats, deleteChat, postChat } = useChat(user);
   const [_, navigate] = useLocation();
   const [errorMsg, setError] = useContext(ErrorContext);
@@ -13,10 +13,13 @@ export default function ChatsHistory({ user, onSetActiveChat }) {
   const handleCreateChat = async (e) => {
     e.preventDefault();
     
+    if (!user) {
+      return;
+    }
+    
     try {
       const chat = await postChat("Nuevo chat");
       if (chat && chat.id) {
-        onSetActiveChat(chat.id);
         navigate(`/chats/${chat.id}`);
       }
     } catch (error) {
@@ -33,7 +36,6 @@ export default function ChatsHistory({ user, onSetActiveChat }) {
         title={chat.title}
         date={chat["created_at"]}
         onDeleteChat={deleteChat}
-        onSetActiveChat={onSetActiveChat}
       />
     );
   });
@@ -42,7 +44,12 @@ export default function ChatsHistory({ user, onSetActiveChat }) {
     <aside className={styles.pastConversations}>
       <div className={styles.header}>
         <h2 className={styles.title}>Conversaciones pasadas</h2>
-        <button onClick={handleCreateChat} className={styles.createChatbtn} aria-label="Crear nuevo chat">
+        <button 
+          onClick={handleCreateChat} 
+          className={styles.createChatbtn} 
+          aria-label="Crear nuevo chat"
+          disabled={!user}
+        >
           <svg className={styles.icon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 4V20M20 12H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
@@ -50,7 +57,11 @@ export default function ChatsHistory({ user, onSetActiveChat }) {
         </button>
       </div>
       <div className={styles.chatItems}>
-        {past_chats.length === 0 ? (
+        {!user ? (
+          <p className={styles.loginPrompt}>
+            Inicia sesión para ver tus chats
+          </p>
+        ) : past_chats.length === 0 ? (
           <p>No tienes chats recientes</p>
         ) : (
           past_chats

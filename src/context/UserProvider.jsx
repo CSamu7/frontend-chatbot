@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { UserContext } from "./UserContext";
 import { userServices } from "../services/userServices";
 
-export default function useUser() {
+export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -49,5 +50,9 @@ export default function useUser() {
     }
   };
 
-  return { user, isLoading, login, logout };
+  return (
+    <UserContext.Provider value={{ user, isLoading, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
 }

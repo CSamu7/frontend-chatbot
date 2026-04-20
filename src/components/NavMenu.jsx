@@ -28,7 +28,7 @@ export default function NavMenu({ onLogin, onLogout, user }) {
         {user && (
           <li>
             <button 
-              className={styles.logoutBtn}
+              className={styles.menuLink}
               onClick={handleLogout}
             >
               Cerrar sesión

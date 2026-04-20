@@ -11,6 +11,11 @@ const chatsService = {
       }
     );
 
+    if (!request.ok) {
+      const error = await request.json();
+      throw new Error(error.detail || 'Error al obtener los chats');
+    }
+
     const response = await request.json();
     return response;
   },
@@ -18,44 +23,53 @@ const chatsService = {
   deleteChat: async (id_chat) => {
     const headers = createCsrfHeaders();
 
-    await fetch(`${API_URL}/chats/${id_chat}`, {
+    const request = await fetch(`${API_URL}/chats/${id_chat}`, {
       method: "DELETE",
       credentials: "include",
       headers,
     });
+
+    if (!request.ok) {
+      const error = await request.json();
+      throw new Error(error.detail || 'Error al eliminar el chat');
+    }
   },
   
   postChat: async (id_user, title) => {
     const headers = createCsrfHeaders();
-    headers.append("Accept", "application/json");
-    headers.set("Content-Type", "application/json");
 
     const request = await fetch(`${API_URL}/chats/`, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify({
-        title,
-        user: id_user,
-      }),
+      body: JSON.stringify({ title }),
       headers,
     });
 
-    if (!request.ok) throw await request.json();
+    if (!request.ok) {
+      const error = await request.json();
+      throw new Error(error.detail || 'Error al crear el chat');
+    }
+
     const response = await request.json();
     return response;
   },
   
   patchChat: async (id_chat, newTitle) => {
     const headers = createCsrfHeaders();
-    headers.append("Accept", "application/json");
-    headers.set("Content-Type", "application/json");
 
-    await fetch(`${API_URL}/chats/${id_chat}`, {
+    const request = await fetch(`${API_URL}/chats/${id_chat}`, {
       method: "PATCH",
       credentials: "include",
       headers,
       body: JSON.stringify({ title: newTitle }),
     });
+
+    if (!request.ok) {
+      const error = await request.json();
+      throw new Error(error.detail || 'Error al modificar el chat');
+    }
+
+    return await request.json();
   },
 };
 

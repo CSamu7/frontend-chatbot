@@ -5,15 +5,19 @@ export default function useMessage() {
   const [messages, setMessages] = useState([]);
 
   const getMessages = async (idChat) => {
-    const messages = await messagesService.getMessages(idChat);
-
-    setMessages(messages.results);
+    const messagesData = await messagesService.getMessages(idChat);
+    
+    const formattedMessages = messagesData.map((msg, index) => ({
+      text: msg.text,
+      isUser: index % 2 === 0,
+      time: new Date().toLocaleTimeString(),
+    }));
+    
+    setMessages(formattedMessages);
   };
 
   const postMessage = async (idChat, text) => {
-    const idUser = localStorage.getItem("id");
-
-    await messagesService.postMessage(idChat, idUser, text);
+    await messagesService.postMessage(idChat, text);
     await getMessages(idChat);
   };
 

@@ -3,22 +3,27 @@ const getCsrfCookie = () => {
     .split(";")
     .map((cookie) => cookie.trim());
 
-  const csrfIndex = splitCookies.findIndex((cookie) =>
-    cookie.startsWith("csrf")
+  const csrfCookie = splitCookies.find((cookie) =>
+    cookie.startsWith("csrftoken=")
   );
 
-  const csrfValue = splitCookies[csrfIndex].split("=")[1];
-
+  if (!csrfCookie) return null;
+  
+  const csrfValue = csrfCookie.split("=")[1];
   return csrfValue;
 };
 
 const createCsrfHeaders = () => {
   const csrf = getCsrfCookie();
-
-  return new Headers({
-    "Content-Type": "x-www-form-urlencoded",
-    "X-CSRFToken": csrf,
-  });
+  const headers = new Headers();
+  
+  headers.set("Content-Type", "application/json");
+  
+  if (csrf) {
+    headers.set("X-CSRFToken", csrf);
+  }
+  
+  return headers;
 };
 
 export { createCsrfHeaders };

@@ -3,14 +3,19 @@ import "./App.css";
 import ChatBotPage from "./pages/ChatBotPage";
 import SignUp from "./pages/SignUp";
 import ErrorDetailsProvider from "./context/ErrorContextProvider";
+import { useUserContext } from "./context/UserContext";
 
 function App() {
+  const { user, isLoading } = useUserContext();
+
+  if (isLoading) {
+    return <div>Cargando...</div>;
+  }
+
   return (
     <Switch>
-      <ErrorDetailsProvider>
-        <Route path="/" component={ChatBotPage}></Route>
-        <Route path="/signup" component={SignUp}></Route>
-      </ErrorDetailsProvider>
+      <Route path="/" component={ChatBotPage} />
+      <Route path="/signup" component={SignUp} />
     </Switch>
   );
 }
