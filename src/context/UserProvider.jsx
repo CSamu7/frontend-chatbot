@@ -1,13 +1,18 @@
-import { useState, useEffect } from "react";
+// src/context/UserProvider.jsx
+import { useState, useEffect, useCallback, useRef } from "react";
 import { UserContext } from "./UserContext";
 import { userServices } from "../services/userServices";
 
 export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
     const getUser = async () => {
+      if (fetchedRef.current) return;
+      fetchedRef.current = true;
+      
       try {
         const userData = await userServices.getUser();
         if (userData.id) {
@@ -24,7 +29,7 @@ export default function UserProvider({ children }) {
     getUser();
   }, []);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     setIsLoading(true);
     try {
       const response = await userServices.login(email, password);
@@ -37,9 +42,9 @@ export default function UserProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setIsLoading(true);
     try {
       await userServices.logout();
@@ -48,7 +53,7 @@ export default function UserProvider({ children }) {
       setUser(null);
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, isLoading, login, logout }}>

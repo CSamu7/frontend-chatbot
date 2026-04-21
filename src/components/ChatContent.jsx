@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import styles from "./ChatContent.module.css";
 
 export default function ChatContent({ idChat, messages, onMessages }) {
+  console.log("ChatContent RENDER - idChat:", idChat);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [copiedMessageId, setCopiedMessageId] = useState(null);
   
   useEffect(() => {
+    console.log("ChatContent - idChat cambiado a:", idChat);
+    
     const loadMessages = async () => {
+      if (!idChat) return;
+      
       try {
         setIsLoading(true);
         setError(null);
@@ -27,16 +32,13 @@ export default function ChatContent({ idChat, messages, onMessages }) {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedMessageId(index);
-      setTimeout(() => {
-        setCopiedMessageId(null);
-      }, 2000);
+      setTimeout(() => setCopiedMessageId(null), 2000);
     } catch (error) {
       console.error("Error al copiar el mensaje:", error);
     }
   };
 
-  if (isLoading) return <div>Cargando mensajes...</div>;
-  
+  if (isLoading) return <div className={styles.loading}>Cargando mensajes...</div>;
   if (error) return <div className={styles.error}>Error: {error}</div>;
 
   const messagesJSX = messages.map((msg, index) => (
@@ -62,9 +64,9 @@ export default function ChatContent({ idChat, messages, onMessages }) {
 
   return (
     <div className={styles.chat}>
-      {messagesJSX.length <= 0 ? (
+      {messagesJSX.length === 0 ? (
         <p className={styles.emptyChatMessage}>
-          Envia un mensaje para interactuar con el chatbot
+          Envía un mensaje para interactuar con el chatbot
         </p>
       ) : (
         messagesJSX

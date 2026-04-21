@@ -1,4 +1,4 @@
-import { Link, Route, Router, Switch } from "wouter";
+import { Router, Route, Switch } from "wouter";
 import "./App.css";
 import ChatBotPage from "./pages/ChatBotPage";
 import SignUp from "./pages/SignUp";
@@ -6,17 +6,22 @@ import ErrorDetailsProvider from "./context/ErrorContextProvider";
 import { useUserContext } from "./context/UserContext";
 
 function App() {
-  const { user, isLoading } = useUserContext();
+  const { isLoading } = useUserContext();
 
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return <div style={{ color: 'white', padding: '2rem' }}>Cargando...</div>;
   }
 
   return (
-    <Switch>
-      <Route path="/" component={ChatBotPage} />
-      <Route path="/signup" component={SignUp} />
-    </Switch>
+    <Router>
+      <ErrorDetailsProvider>
+        <Switch>
+          <Route path="/" component={ChatBotPage} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/chats/:id" component={ChatBotPage} />
+        </Switch>
+      </ErrorDetailsProvider>
+    </Router>
   );
 }
 

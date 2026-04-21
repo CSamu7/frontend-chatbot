@@ -4,41 +4,33 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const messagesService = {
   getMessages: async (idChat) => {
-    const request = await fetch(
-      `${API_URL}/chats/${idChat}/messages/`,
-      {
-        credentials: "include",
-      }
-    );
-
-    if (!request.ok) {
-      const error = await request.json();
-      throw new Error(error.detail || 'Error al obtener los mensajes');
-    }
-
-    const response = await request.json();
-    return response;
+    console.log("getMessages: El backend no soporta GET /messages/");
+    return [];
   },
   
   postMessage: async (idChat, text) => {
     const headers = createCsrfHeaders();
-
+    
+    console.log("postMessage - URL:", `${API_URL}/chats/${idChat}/messages/`);
+    
     const request = await fetch(
-      `${API_URL}/chats/${idChat}/messages/post/`,
+      `${API_URL}/chats/${idChat}/messages/`,
       {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({ text }),
         headers,
-        credentials: "include",
       }
     );
-
+    
     if (!request.ok) {
-      const error = await request.json();
-      throw new Error(error.detail || 'Error al enviar el mensaje');
+      const error = await request.json().catch(() => ({}));
+      console.error("postMessage - Error:", error);
+      throw new Error(error.detail || error.error || 'Error al enviar mensaje');
     }
-
+    
     const response = await request.json();
+    console.log("postMessage - Respuesta:", response);
     return response;
   },
 };

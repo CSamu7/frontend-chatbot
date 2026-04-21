@@ -15,28 +15,37 @@ export default function InputMessage({
   const [location, navigate] = useLocation();
   const [, setError] = useContext(ErrorContext);
 
-  const idChat = parseInt(location.split("/").at(-1));
+  const idChat = location.includes("/chats/") ? parseInt(location.split("/").at(-1)) : null;
 
   const handleSendMessage = async () => {
     if (!text || !text.trim()) return;
+    
+    if (!onPostChat || !onPostMessage || !onModifyChat) {
+      console.error("Faltan props en InputMessage");
+      setError("Error: Funciones no disponibles");
+      return;
+    }
+    
     try {
       setError("");
       setIsSending(true);
 
       const shortTitle = `${text.slice(0, 47)}...`;
 
-      if (location.includes("chat")) {
-        if (messages.length <= 0) {
-          onModifyChat(idChat, shortTitle);
+      if (location.includes("/chats/") && idChat) {
+        if (messages.length === 0) {
+          await onModifyChat(idChat, shortTitle);
         }
-
         await onPostMessage(idChat, text);
       } else {
         const newChat = await onPostChat(shortTitle);
-        await onPostMessage(newChat.id, text);
-        navigate(`/chats/${newChat.id}`);
+        if (newChat && newChat.id) {
+          await onPostMessage(newChat.id, text);
+          navigate(`/chats/${newChat.id}`);
+        }
       }
     } catch (error) {
+      console.error("Error en handleSendMessage:", error);
       setError("Error al enviar mensaje. Intenta de nuevo.");
     } finally {
       setIsSending(false);
@@ -54,6 +63,12 @@ export default function InputMessage({
         disabled={isSending}
         value={text}
         onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+          }
+        }}
       />
       <button className={styles.sendMsg} onClick={handleSendMessage} disabled={isSending}>
         <img src={send_img} alt="Enviar mensaje" />
