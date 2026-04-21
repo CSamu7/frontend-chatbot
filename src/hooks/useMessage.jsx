@@ -1,4 +1,3 @@
-// src/hooks/useMessage.js
 import { useState, useCallback } from "react";
 import { messagesService } from "../services/messageServices";
 
@@ -44,5 +43,15 @@ export default function useMessage() {
     }
   }, []);
 
-  return { messages, getMessages, postMessage, setMessages };
+  const clearMessages = useCallback(() => {
+    setMessages([]);
+  }, []);
+
+  return { 
+    messages, 
+    getMessages, 
+    postMessage, 
+    clearMessages,
+    setMessages 
+  };
 }

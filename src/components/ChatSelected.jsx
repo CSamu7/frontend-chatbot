@@ -1,41 +1,35 @@
-// src/components/ChatSelected.jsx
-import { useLocation } from "wouter";
+import { useEffect } from "react";
 import styles from "./ChatSelected.module.css";
 import ChatContent from "./ChatContent";
 import InputMessage from "./InputMessage";
 import NoChatSelected from "./NoChatSelected";
+import { Route, Switch } from "wouter";
 import useMessage from "../hooks/useMessage";
 
 export default function ChatSelected({ onPostChat, onModifyChat }) {
-  const [location] = useLocation();
   const { messages, getMessages, postMessage } = useMessage();
-  
-  console.log("ChatSelected - location:", location);
 
-  // Determinar qué mostrar basado en la ubicación
-  let content;
-  let idChat = null;
-  
-  if (location === "/" || location === "") {
-    content = <NoChatSelected />;
-  } else if (location.startsWith("/chats/")) {
-    idChat = parseInt(location.split("/").pop());
-    content = (
-      <ChatContent
-        key={idChat}
-        idChat={idChat}
-        messages={messages}
-        onMessages={getMessages}
-      />
-    );
-  } else {
-    content = <NoChatSelected />;
-  }
+  useEffect(() => {
+    console.log("ChatSelected montado - onPostChat:", !!onPostChat, "onModifyChat:", !!onModifyChat);
+  }, [onPostChat, onModifyChat]);
 
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatContent}>
-        {content}
+        <Switch>
+          <Route path="/" component={NoChatSelected} />
+          <Route path="/chats/:id">
+            {(params) => (
+              <ChatContent
+                key={params.id}
+                idChat={parseInt(params.id)}
+                messages={messages}
+                onMessages={getMessages}
+                onPostMessage={postMessage}
+              />
+            )}
+          </Route>
+        </Switch>
       </div>
       <div className={styles.inputContainer}>
         <InputMessage

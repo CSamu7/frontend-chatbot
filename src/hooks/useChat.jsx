@@ -1,4 +1,3 @@
-// src/hooks/useChat.js
 import { useEffect, useState, useCallback, useRef } from "react";
 import { chatsService } from "../services/chatServices";
 
@@ -17,7 +16,6 @@ export default function useChat(user) {
   }, [user?.id]);
 
   useEffect(() => {
-    // Solo ejecutar si el ID del usuario cambió
     if (user?.id && user.id !== prevUserId.current) {
       prevUserId.current = user.id;
       fetchChats();
@@ -43,10 +41,28 @@ export default function useChat(user) {
     const id_user = user?.id || localStorage.getItem("id");
     if (!id_user) throw new Error("Usuario no autenticado");
     
-    const chat = await chatsService.postChat(id_user, title);
-    await fetchChats();
-    return chat;
-  }, [user?.id, fetchChats]);
+    const chatsBefore = await chatsService.getChats(id_user);
+    const chatsListBefore = chatsBefore.results || chatsBefore;
+    
+    await chatsService.postChat(id_user, title);
+    
+    const chatsAfter = await chatsService.getChats(id_user);
+    const chatsListAfter = chatsAfter.results || chatsAfter;
+    
+    const newChat = chatsListAfter.find(
+      chat => !chatsListBefore.some(oldChat => oldChat.id === chat.id)
+    );
+    
+    setChats(chatsListAfter);
+    
+    return newChat || chatsListAfter[0];
+  }, [user?.id]);
 
-  return { chats, deleteChat, postChat, modifyChat };
+  return { 
+    chats, 
+    deleteChat, 
+    postChat, 
+    modifyChat, 
+    refreshChats: fetchChats 
+  };
 }

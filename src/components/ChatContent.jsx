@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import styles from "./ChatContent.module.css";
 
-export default function ChatContent({ idChat, messages, onMessages }) {
-  console.log("ChatContent RENDER - idChat:", idChat);
+export default function ChatContent({ idChat, messages, onMessages, onPostMessage }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [copiedMessageId, setCopiedMessageId] = useState(null);
+  const [pendingProcessed, setPendingProcessed] = useState(false);
   
   useEffect(() => {
     console.log("ChatContent - idChat cambiado a:", idChat);
@@ -16,7 +16,19 @@ export default function ChatContent({ idChat, messages, onMessages }) {
       try {
         setIsLoading(true);
         setError(null);
+        
         await onMessages(idChat);
+        
+        const pendingKey = `pending_message_${idChat}`;
+        const pendingMessage = sessionStorage.getItem(pendingKey);
+        
+        if (pendingMessage && !pendingProcessed) {
+          console.log("ChatContent - Encontrado mensaje pendiente:", pendingMessage);
+          sessionStorage.removeItem(pendingKey);
+          setPendingProcessed(true);
+          
+          await onPostMessage(idChat, pendingMessage);
+        }
       } catch (err) {
         console.error("Error loading messages:", err);
         setError(err.message || "Error al cargar los mensajes");
@@ -26,7 +38,11 @@ export default function ChatContent({ idChat, messages, onMessages }) {
     };
     
     loadMessages();
-  }, [idChat, onMessages]);
+    
+    return () => {
+      setPendingProcessed(false);
+    };
+  }, [idChat, onMessages, onPostMessage]);
 
   const handleCopyMessage = async (text, index) => {
     try {

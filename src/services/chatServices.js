@@ -4,10 +4,14 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const chatsService = {
   getChats: async (id_user) => {
-    const request = await fetch(`${API_URL}/users/${id_user}/chats/`, {
-      credentials: "include",
-    });
-    if (!request.ok) throw new Error('Error al obtener chats');
+    const request = await fetch(
+      `${API_URL}/users/${id_user}/chats/`,
+      { credentials: "include" }
+    );
+    if (!request.ok) {
+      const error = await request.json().catch(() => ({}));
+      throw new Error(error.detail || 'Error al obtener los chats');
+    }
     return await request.json();
   },
   
@@ -18,7 +22,10 @@ const chatsService = {
       credentials: "include",
       headers,
     });
-    if (!request.ok) throw new Error('Error al eliminar chat');
+    if (!request.ok) {
+      const error = await request.json().catch(() => ({}));
+      throw new Error(error.detail || 'Error al eliminar el chat');
+    }
   },
   
   postChat: async (id_user, title) => {
@@ -29,9 +36,14 @@ const chatsService = {
       body: JSON.stringify({ title }),
       headers,
     });
+    
     if (!request.ok) {
       const error = await request.json().catch(() => ({}));
-      throw error;
+      throw new Error(error.detail || 'Error al crear el chat');
+    }
+    
+    if (request.status === 204) {
+      return { success: true };
     }
     return await request.json();
   },
@@ -44,7 +56,10 @@ const chatsService = {
       headers,
       body: JSON.stringify({ title: newTitle }),
     });
-    if (!request.ok) throw new Error('Error al modificar chat');
+    if (!request.ok) {
+      const error = await request.json().catch(() => ({}));
+      throw new Error(error.detail || 'Error al modificar el chat');
+    }
     return await request.json();
   },
 };
