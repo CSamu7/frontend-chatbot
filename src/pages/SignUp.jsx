@@ -1,12 +1,12 @@
 import { useRef, useState, useContext } from "react";
 import { useLocation } from "wouter";
 import Header from "../components/Header";
-import useUser from "../hooks/useUser";
+import { useUserContext } from "../context/UserContext";
 import styles from "./SignUp.module.css";
 import { ErrorContext } from "../context/ErrorContext";
 
 export default function SignUp() {
-  const { registerUser } = useUser();
+  const { registerUser } = useUserContext();
   const [formError, setFormError] = useState([]);
   const form = useRef();
   const [, navigate] = useLocation();

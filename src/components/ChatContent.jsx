@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./ChatContent.module.css";
 
 export default function ChatContent({ idChat, messages, onMessages, onPostMessage }) {
@@ -7,6 +7,28 @@ export default function ChatContent({ idChat, messages, onMessages, onPostMessag
   const [copiedMessageId, setCopiedMessageId] = useState(null);
   const [pendingProcessed, setPendingProcessed] = useState(false);
   
+  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+
+  const scrollToBottom = () => {
+    if (shouldAutoScroll && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleScroll = () => {
+    if (chatContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+      setShouldAutoScroll(isNearBottom);
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   useEffect(() => {
     console.log("ChatContent - idChat cambiado a:", idChat);
     
@@ -29,6 +51,8 @@ export default function ChatContent({ idChat, messages, onMessages, onPostMessag
           
           await onPostMessage(idChat, pendingMessage);
         }
+        
+        setShouldAutoScroll(true);
       } catch (err) {
         console.error("Error loading messages:", err);
         setError(err.message || "Error al cargar los mensajes");
@@ -79,7 +103,11 @@ export default function ChatContent({ idChat, messages, onMessages, onPostMessag
   ));
 
   return (
-    <div className={styles.chat}>
+    <div 
+      className={styles.chat} 
+      ref={chatContainerRef}
+      onScroll={handleScroll}
+    >
       {messagesJSX.length === 0 ? (
         <p className={styles.emptyChatMessage}>
           Envía un mensaje para interactuar con el chatbot
@@ -87,6 +115,8 @@ export default function ChatContent({ idChat, messages, onMessages, onPostMessag
       ) : (
         messagesJSX
       )}
+      {/* Elemento invisible al final para hacer scroll */}
+      <div ref={messagesEndRef} />
     </div>
   );
 }

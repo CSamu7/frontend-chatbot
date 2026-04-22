@@ -29,8 +29,8 @@
   gap: 0.75rem;
   min-height: 0;
   height: 100%;
-  padding-bottom: 80px;
-  background: linear-gradient #1a1a1a;
+  padding-bottom: 20px;
+  background: #1a1a1a;
 }
 
 .message {
@@ -38,12 +38,12 @@
   margin: 5px;
   border-radius: 1rem;
   max-width: 70%;
-  word-break: break-all;
-  box-shadow: var(--shadow-sm);
+  word-break: break-word;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .ownMessage {
-  background: var(--message-user);
+  background: #2bc916;
   color: white;
   margin-left: auto;
   border-bottom-right-radius: 0.25rem;
@@ -51,12 +51,12 @@
 }
 
 .botMessage {
-  background: var(--message-bot);
-  border: 1px solid var(--message-bot-border);
-  color: var(--text-primary);
+  background: #e9ecef;
+  border: 1px solid #dee2e6;
+  color: #0f0f0f;
   border-bottom-left-radius: 0.25rem;
   animation: slideInLeft 0.3s ease-out;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .messageTime {
@@ -71,17 +71,17 @@
 }
 
 .chat::-webkit-scrollbar-track {
-  background: var(--bg-tertiary);
+  background: #3d3d3d;
   border-radius: 4px;
 }
 
 .chat::-webkit-scrollbar-thumb {
-  background: var(--secondary-light);
+  background: #555;
   border-radius: 4px;
 }
 
 .chat::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+  background: #666;
 }
 
 .emptyChatMessage {
@@ -157,6 +157,18 @@
   word-break: break-word;
 }
 
+.error {
+  color: #ff4444;
+  text-align: center;
+  padding: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}
+
 @media (max-width: 768px) {
   .copyButton {
     font-size: 0.9rem;
@@ -169,5 +181,9 @@
   
   .chat {
     padding: 1rem;
+  }
+  
+  .message {
+    max-width: 85%;
   }
 }

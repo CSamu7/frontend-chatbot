@@ -12,8 +12,7 @@ const userServices = {
       return { isAuthenticated: false };
     }
 
-    const response = await request.json();
-    return response;
+    return await request.json();
   },
 
   login: async (email, password) => {
@@ -31,8 +30,7 @@ const userServices = {
       throw new Error(error.error || 'Credenciales inválidas');
     }
 
-    const response = await request.json();
-    return response;
+    return await request.json();
   },
 
   registerUser: async (user) => {
@@ -55,8 +53,7 @@ const userServices = {
       throw new Error(errorMsg);
     }
 
-    const response = await request.json();
-    return response;
+    return await request.json();
   },
 
   logout: async () => {
