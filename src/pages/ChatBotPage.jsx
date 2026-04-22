@@ -1,8 +1,6 @@
-// src/pages/ChatBotPage.jsx
 import ChatsHistory from "../components/ChatsHistory";
 import ChatSelected from "../components/ChatSelected";
 import { useContext, useEffect, useState } from "react";
-import { useLocation } from "wouter";
 import styles from "./ChatBotPage.module.css";
 import LoginModal from "../components/LoginModal";
 import NavMenu from "../components/NavMenu";
@@ -18,10 +16,7 @@ export default function ChatBotPage() {
   const { user, logout } = useUserContext();
   const { setCsrf } = useAuth();
   const [error, setError] = useContext(ErrorContext);
-  const { postChat, modifyChat } = useChat(user);
-  const [location] = useLocation();
-
-  console.log("ChatBotPage - location:", location, "user:", !!user);
+  const { chats, deleteChat, postChat, modifyChat } = useChat(user);
 
   useEffect(() => {
     setCsrf();
@@ -36,9 +31,15 @@ export default function ChatBotPage() {
           user={user}
         />
       </Header>
-      <ChatsHistory user={user} />
+      <ChatsHistory 
+        user={user}
+        chats={chats}
+        onDeleteChat={deleteChat}
+        onPostChat={postChat}
+        onModifyChat={modifyChat}
+      />
       <ChatSelected 
-        key={location}
+        chats={chats}
         onPostChat={postChat}
         onModifyChat={modifyChat}
       />

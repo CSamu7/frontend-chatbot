@@ -9,6 +9,7 @@ export default function InputMessage({
   onPostChat,
   onModifyChat,
   messages,
+  onSetPendingMessage,
 }) {
   const [isSending, setIsSending] = useState(false);
   const [text, setText] = useState("");
@@ -46,22 +47,36 @@ export default function InputMessage({
       const shortTitle = text.length > 47 ? `${text.slice(0, 47)}...` : text;
 
       if (location.includes("/chats/") && idChat) {
+        console.log("InputMessage - En chat existente. idChat:", idChat);
+        
         if (messages.length === 0) {
+          console.log("InputMessage - Primer mensaje, actualizando título a:", shortTitle);
           await onModifyChat(idChat, shortTitle);
         }
         await onPostMessage(idChat, text);
+        setText("");
       } else {
-        const newChat = await onPostChat(shortTitle);
+        console.log("InputMessage - Creando nuevo chat. Texto:", text);
+        
+        const newChat = await onPostChat("Nuevo chat");
+        console.log("InputMessage - Chat creado:", newChat);
         
         if (newChat && newChat.id) {
-          sessionStorage.setItem(`pending_message_${newChat.id}`, text);
+          console.log("InputMessage - Modificando título a:", shortTitle);
+          
+          if (onSetPendingMessage) {
+            onSetPendingMessage(newChat.id, text);
+          }
+          
+          await onModifyChat(newChat.id, shortTitle);
+          console.log("InputMessage - Título modificado");
+          
+          setText("");
           navigate(`/chats/${newChat.id}`);
         } else {
           throw new Error("No se pudo crear el chat");
         }
       }
-      
-      setText("");
     } catch (error) {
       console.error("Error en handleSendMessage:", error);
       setError("Error al enviar mensaje. Intenta de nuevo.");

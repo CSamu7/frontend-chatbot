@@ -1,53 +1,95 @@
 .chatItem {
-  background: var(--bg-secondary);
+  background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   padding: 0.7rem 1rem;
   margin-bottom: 0.5rem;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   text-decoration: none;
   display: flex;
   justify-content: space-between;
-  gap: 10px;
   align-items: center;
-  box-shadow: var(--shadow-sm);
 }
 
 .chatItem:hover {
-  transform: translateX(4px);
-  border-color: var(--primary-light);
-  box-shadow: var(--shadow-md);
-  background: linear-gradient(135deg, #fafafa 0%, #f8fafc 100%);
+  background-color: var(--bg-secondary);
+}
+
+.chatData {
+  flex: 1;
+  min-width: 0;
 }
 
 .title {
   margin: 0 0 0.25rem 0;
-  font-size: 0.95rem;
-  font-weight: 500;
+  font-size: 1rem;
   color: var(--text-primary);
-  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .date {
   margin: 0;
-  font-size: 0.7rem;
-  color: var(--text-tertiary);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.btnEdit {
+  border: 0;
+  background-color: transparent;
+  padding: 0.4rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.btnEdit:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
 }
 
 .btnDelete {
   border: 0;
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 0.35rem 0.65rem;
+  background-color: #ff4444;
+  padding: 0.4rem 0.6rem;
   border-radius: 0.5rem;
+  color: white;
   cursor: pointer;
-  transition: var(--transition);
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: bold;
+  opacity: 0.8;
+  transition: all 0.2s ease;
 }
 
 .btnDelete:hover {
-  background: #dc2626;
-  color: white;
+  background-color: #ff6666;
+  opacity: 1;
   transform: scale(1.05);
+}
+
+.titleInput {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.titleInput:focus {
+  border-color: #2bc916;
+  box-shadow: 0 0 0 2px rgba(43, 201, 22, 0.2);
 }

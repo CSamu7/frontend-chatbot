@@ -1,14 +1,14 @@
 import { useLocation } from "wouter";
-import useChat from "../hooks/useChat";
 import ChatItem from "./ChatItem";
 import styles from "./ChatsHistory.module.css";
 import { useContext } from "react";
 import { ErrorContext } from "../context/ErrorContext";
 
-export default function ChatsHistory({ user }) {
-  const { chats, deleteChat, postChat } = useChat(user);
+export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, onModifyChat }) {
   const [_, navigate] = useLocation();
   const [errorMsg, setError] = useContext(ErrorContext);
+
+  console.log("ChatsHistory - chats actualizados:", chats.map(c => ({ id: c.id, title: c.title })));
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
@@ -18,7 +18,8 @@ export default function ChatsHistory({ user }) {
     }
     
     try {
-      const chat = await postChat("Nuevo chat");
+      setError("");
+      const chat = await onPostChat("Nuevo chat");
       if (chat && chat.id) {
         navigate(`/chats/${chat.id}`);
       }
@@ -35,7 +36,8 @@ export default function ChatsHistory({ user }) {
         id={chat.id}
         title={chat.title}
         date={chat["created_at"]}
-        onDeleteChat={deleteChat}
+        onDeleteChat={onDeleteChat}
+        onModifyChat={onModifyChat}
       />
     );
   });

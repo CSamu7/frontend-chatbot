@@ -9,7 +9,15 @@ export default function useChat(user) {
     if (!user?.id) return;
     try {
       const response = await chatsService.getChats(user.id);
-      setChats(response.results || response);
+      const chatsList = response.results || response;
+      
+      const sortedChats = [...chatsList].sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        return dateB - dateA;
+      });
+      
+      setChats(sortedChats);
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -26,43 +34,64 @@ export default function useChat(user) {
   }, [user, fetchChats]);
 
   const deleteChat = useCallback(async (id_chat) => {
-    await chatsService.deleteChat(id_chat);
-    setChats(prev => prev.filter((chat) => chat.id !== id_chat));
+  await chatsService.deleteChat(id_chat);
+    const userId = localStorage.getItem("id");
+    if (userId) {
+      localStorage.removeItem(`chat_messages_${userId}_${id_chat}`);
+    }
+    localStorage.removeItem(`chat_messages_${id_chat}`); // Por si acaso
+  setChats(prev => prev.filter((chat) => chat.id !== id_chat));
   }, []);
 
   const modifyChat = useCallback(async (id_chat, newTitle) => {
+    console.log("useChat.modifyChat - ANTES - id:", id_chat, "nuevo título:", newTitle);
+    
     await chatsService.patchChat(id_chat, newTitle);
-    setChats(prev => prev.map((chat) =>
-      chat.id === id_chat ? { ...chat, title: newTitle } : chat
-    ));
+    
+    console.log("useChat.modifyChat - DESPUÉS del patch");
+    
+    setChats(prev => {
+      console.log("useChat.modifyChat - Estado anterior:", prev.map(c => ({ id: c.id, title: c.title })));
+      const updated = prev.map((chat) =>
+        chat.id === id_chat ? { ...chat, title: newTitle } : chat
+      );
+      console.log("useChat.modifyChat - Estado nuevo:", updated.map(c => ({ id: c.id, title: c.title })));
+      return [...updated];
+    });
   }, []);
 
   const postChat = useCallback(async (title) => {
     const id_user = user?.id || localStorage.getItem("id");
     if (!id_user) throw new Error("Usuario no autenticado");
     
-    const chatsBefore = await chatsService.getChats(id_user);
-    const chatsListBefore = chatsBefore.results || chatsBefore;
+    console.log("useChat.postChat - Creando chat con título:", title);
     
     await chatsService.postChat(id_user, title);
     
-    const chatsAfter = await chatsService.getChats(id_user);
-    const chatsListAfter = chatsAfter.results || chatsAfter;
+    const response = await chatsService.getChats(id_user);
+    const chatsList = response.results || response;
+    const sortedChats = [...chatsList].sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return dateB - dateA;
+    });
     
-    const newChat = chatsListAfter.find(
-      chat => !chatsListBefore.some(oldChat => oldChat.id === chat.id)
-    );
+    setChats(sortedChats);
     
-    setChats(chatsListAfter);
-    
-    return newChat || chatsListAfter[0];
+    console.log("useChat.postChat - Chat creado, devolviendo:", sortedChats[0]);
+    return sortedChats[0];
   }, [user?.id]);
+
+  const getChatById = useCallback((id) => {
+    return chats.find(chat => chat.id === id);
+  }, [chats]);
 
   return { 
     chats, 
     deleteChat, 
     postChat, 
     modifyChat, 
-    refreshChats: fetchChats 
+    refreshChats: fetchChats,
+    getChatById
   };
 }

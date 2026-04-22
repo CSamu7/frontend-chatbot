@@ -45,13 +45,15 @@ export default function UserProvider({ children }) {
   }, []);
 
   const logout = useCallback(async () => {
-    setIsLoading(true);
+  setIsLoading(true);
     try {
-      await userServices.logout();
+    await userServices.logout();
     } finally {
-      localStorage.clear();
-      setUser(null);
-      setIsLoading(false);
+    localStorage.removeItem("id");
+    localStorage.removeItem("user");
+    
+    setUser(null);
+    setIsLoading(false);
     }
   }, []);
 
