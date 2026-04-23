@@ -1,3 +1,4 @@
+// src/hooks/useChat.js
 import { useEffect, useState, useCallback, useRef } from "react";
 import { chatsService } from "../services/chatServices";
 

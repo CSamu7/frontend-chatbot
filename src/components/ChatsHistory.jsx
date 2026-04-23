@@ -8,14 +8,13 @@ export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, on
   const [location, navigate] = useLocation();
   const [errorMsg, setError] = useContext(ErrorContext);
 
-  console.log("ChatsHistory - render - chats:", chats.map(c => ({ id: c.id, title: c.title })));
-
   const activeChatId = location.includes("/chats/") ? parseInt(location.split("/").at(-1)) : null;
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
     
     if (!user) {
+      setError("Debes iniciar sesión para crear un chat.");
       return;
     }
     
@@ -27,23 +26,21 @@ export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, on
       }
     } catch (error) {
       console.error("Error al crear chat:", error);
-      setError("Error al crear chat. Intenta de nuevo.");
+      setError(error.message || "Error al crear chat. Intenta de nuevo.");
     }
   };
 
-  const past_chats = chats.map((chat) => {
-    return (
-      <ChatItem
-        key={chat.id}
-        id={chat.id}
-        title={chat.title}
-        date={chat["created_at"]}
-        onDeleteChat={onDeleteChat}
-        onModifyChat={onModifyChat}
-        isActive={chat.id === activeChatId}
-      />
-    );
-  });
+  const past_chats = chats.map((chat) => (
+    <ChatItem
+      key={chat.id}
+      id={chat.id}
+      title={chat.title}
+      date={chat["created_at"]}
+      onDeleteChat={onDeleteChat}
+      onModifyChat={onModifyChat}
+      isActive={chat.id === activeChatId}
+    />
+  ));
 
   return (
     <aside className={styles.pastConversations}>
@@ -53,7 +50,6 @@ export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, on
           onClick={handleCreateChat} 
           className={styles.createChatbtn} 
           aria-label="Crear nuevo chat"
-          disabled={!user}
         >
           <svg className={styles.icon} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 4V20M20 12H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -63,9 +59,7 @@ export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, on
       </div>
       <div className={styles.chatItems}>
         {!user ? (
-          <p className={styles.loginPrompt}>
-            Inicia sesión para ver tus chats
-          </p>
+          <p className={styles.loginPrompt}>Inicia sesión para ver tus chats</p>
         ) : past_chats.length === 0 ? (
           <p>No tienes chats recientes</p>
         ) : (

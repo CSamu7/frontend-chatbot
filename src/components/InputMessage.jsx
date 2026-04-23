@@ -3,9 +3,6 @@ import send_img from "../assets/chatbot_send_icon.png";
 import { useContext, useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { ErrorContext } from "../context/ErrorContext";
-import { useUserContext } from "../context/UserContext";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 export default function InputMessage({
   onPostMessage,
@@ -19,7 +16,6 @@ export default function InputMessage({
   const [location, navigate] = useLocation();
   const [, setError] = useContext(ErrorContext);
   const textareaRef = useRef(null);
-  const { user } = useUserContext();
 
   const idChat = location.includes("/chats/") ? parseInt(location.split("/").at(-1)) : null;
 
@@ -38,47 +34,36 @@ export default function InputMessage({
   const handleSendMessage = async () => {
     if (!text || !text.trim()) return;
     
+    if (!onPostChat || !onPostMessage || !onModifyChat) {
+      console.error("Faltan props en InputMessage");
+      setError("Error: Funciones no disponibles");
+      return;
+    }
+    
     setIsSending(true);
     setError("");
 
     const shortTitle = text.length > 47 ? `${text.slice(0, 47)}...` : text;
 
     try {
-      if (!user) {
-        const response = await fetch(`${API_URL}/chatbot/`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: text }),
-        });
-        
-        const data = await response.json();
-        
-        await onPostMessage("guest", text, data.response);
-        setText("");
-        return;
-      }
-      
-      // SI HAY USUARIO (COMPORTAMIENTO NORMAL)
-      if (!onPostChat || !onPostMessage || !onModifyChat) {
-        console.error("Faltan props en InputMessage");
-        setError("Error: Funciones no disponibles");
-        return;
-      }
-
       if (location.includes("/chats/") && idChat) {
+        // Ya estamos en un chat existente
         if (messages.length === 0) {
           await onModifyChat(idChat, shortTitle);
         }
         await onPostMessage(idChat, text);
         setText("");
       } else {
+        // No hay chat seleccionado, crear uno nuevo
         const newChat = await onPostChat("Nuevo chat");
         
         if (newChat && newChat.id) {
           if (onSetPendingMessage) {
             onSetPendingMessage(newChat.id, text);
           }
+          
           await onModifyChat(newChat.id, shortTitle);
+          
           setText("");
           navigate(`/chats/${newChat.id}`);
         } else {
