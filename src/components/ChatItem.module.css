@@ -17,8 +17,8 @@
 }
 
 .chatItem.active {
-  background-color: #2bc916;
-  border-color: #25a813;
+  background-color: #6a6cf5;
+  border-color: #000000;
 }
 
 .chatItem.active .title {
