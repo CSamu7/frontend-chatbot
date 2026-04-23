@@ -32,7 +32,13 @@ export default function UserProvider({ children }) {
     setIsLoading(true);
     try {
       const response = await userServices.registerUser(userData);
-      localStorage.setItem("id", response.user_id);
+      
+      const loginResponse = await userServices.login(userData.email, userData.password);
+      
+      localStorage.setItem("id", loginResponse.id);
+      localStorage.setItem("user", JSON.stringify(loginResponse));
+      setUser(loginResponse);
+      
       return response;
     } catch (error) {
       throw error;

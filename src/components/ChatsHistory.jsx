@@ -5,10 +5,12 @@ import { useContext } from "react";
 import { ErrorContext } from "../context/ErrorContext";
 
 export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, onModifyChat }) {
-  const [_, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const [errorMsg, setError] = useContext(ErrorContext);
 
-  console.log("ChatsHistory - chats actualizados:", chats.map(c => ({ id: c.id, title: c.title })));
+  console.log("ChatsHistory - render - chats:", chats.map(c => ({ id: c.id, title: c.title })));
+
+  const activeChatId = location.includes("/chats/") ? parseInt(location.split("/").at(-1)) : null;
 
   const handleCreateChat = async (e) => {
     e.preventDefault();
@@ -38,6 +40,7 @@ export default function ChatsHistory({ user, chats, onDeleteChat, onPostChat, on
         date={chat["created_at"]}
         onDeleteChat={onDeleteChat}
         onModifyChat={onModifyChat}
+        isActive={chat.id === activeChatId}
       />
     );
   });

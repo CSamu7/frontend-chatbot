@@ -110,12 +110,11 @@ export default function ChatContent({ idChat, messages, onMessages, onPostMessag
     >
       {messagesJSX.length === 0 ? (
         <p className={styles.emptyChatMessage}>
-          Envía un mensaje para interactuar con el chatbot
+          Selecciona una conversación para ver tus mensajes, o envía un mensaje para crear una nueva conversación.
         </p>
       ) : (
         messagesJSX
       )}
-      {/* Elemento invisible al final para hacer scroll */}
       <div ref={messagesEndRef} />
     </div>
   );

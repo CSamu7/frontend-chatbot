@@ -8,6 +8,7 @@ import { ErrorContext } from "../context/ErrorContext";
 export default function SignUp() {
   const { registerUser } = useUserContext();
   const [formError, setFormError] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const form = useRef();
   const [, navigate] = useLocation();
   const [, setError] = useContext(ErrorContext);
@@ -36,13 +37,16 @@ export default function SignUp() {
 
   const handleRegisterUser = async (e) => {
     e.preventDefault();
+    
     setFormError([]);
+    setIsLoading(true);
 
     const formData = new FormData(form.current);
     const errors = validateForm(formData);
 
     if (errors.length > 0) {
       setFormError(errors);
+      setIsLoading(false);
       return;
     }
 
@@ -56,7 +60,7 @@ export default function SignUp() {
       await registerUser(user);
       navigate("/");
     } catch (error) {
-      console.error("Error en registro:", error);
+      setIsLoading(false);
       
       let errorMessage = "";
       
@@ -67,16 +71,10 @@ export default function SignUp() {
         } else if (error.message) {
           errorMessage = error.message;
           setFormError([error.message]);
-        } else if (error.non_field_errors) {
-          errorMessage = error.non_field_errors[0];
-          setFormError(error.non_field_errors);
         } else {
           errorMessage = "Error al registrar usuario. Intenta de nuevo.";
           setFormError(["Error al registrar usuario. Intenta de nuevo."]);
         }
-      } else if (typeof error === 'string') {
-        errorMessage = error;
-        setFormError([error]);
       } else {
         errorMessage = "Error al registrar usuario. Intenta de nuevo.";
         setFormError(["Error al registrar usuario. Intenta de nuevo."]);
@@ -88,10 +86,11 @@ export default function SignUp() {
 
   return (
     <div className={styles.app}>
-      <Header></Header>
+      <Header />
       <div className={styles.formContainer}>
         <form ref={form} onSubmit={handleRegisterUser}>
           <h2>Registro</h2>
+          
           <div>
             <label htmlFor="email">Correo electrónico</label>
             <input
@@ -104,11 +103,21 @@ export default function SignUp() {
           </div>
           <div>
             <label htmlFor="username">Nombre de usuario</label>
-            <input type="text" name="username" id="username" required />
+            <input 
+              type="text" 
+              name="username" 
+              id="username" 
+              required 
+            />
           </div>
           <div>
             <label htmlFor="password">Contraseña</label>
-            <input type="password" name="password" id="password" required />
+            <input 
+              type="password" 
+              name="password" 
+              id="password" 
+              required 
+            />
           </div>
           <div>
             <label htmlFor="confirm-password">Confirmar contraseña</label>
@@ -119,6 +128,7 @@ export default function SignUp() {
               required
             />
           </div>
+          
           {formError.length > 0 && (
             <div className={styles.error}>
               {formError.map((error, index) => (
@@ -126,7 +136,16 @@ export default function SignUp() {
               ))}
             </div>
           )}
-          <input type="submit" value="Registrarse" />
+          
+          <input 
+            type="submit" 
+            value={isLoading ? "Registrando..." : "Registrarse"} 
+            disabled={isLoading}
+          />
+          
+          <p className={styles.loginLink}>
+            ¿Ya tienes cuenta? <a href="/">Inicia sesión</a>
+          </p>
         </form>
       </div>
     </div>

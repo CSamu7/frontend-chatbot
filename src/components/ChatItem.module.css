@@ -16,6 +16,28 @@
   background-color: var(--bg-secondary);
 }
 
+.chatItem.active {
+  background-color: #2bc916;
+  border-color: #25a813;
+}
+
+.chatItem.active .title {
+  color: white;
+}
+
+.chatItem.active .date {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chatItem.active .btnEdit {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.chatItem.active .btnEdit:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
 .chatData {
   flex: 1;
   min-width: 0;
@@ -51,6 +73,7 @@
   font-size: 0.9rem;
   opacity: 0.6;
   transition: all 0.2s ease;
+  color: var(--text-primary);
 }
 
 .btnEdit:hover {
@@ -76,6 +99,14 @@
   background-color: #ff6666;
   opacity: 1;
   transform: scale(1.05);
+}
+
+.chatItem.active .btnDelete {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.chatItem.active .btnDelete:hover {
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .titleInput {

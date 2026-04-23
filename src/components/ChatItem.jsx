@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useState, useRef, useEffect } from "react";
 import styles from "./ChatItem.module.css";
 
-export default function ChatItem({ title, date, id, onDeleteChat, onModifyChat }) {
+export default function ChatItem({ title, date, id, onDeleteChat, onModifyChat, isActive }) {
   const formatedDate = new Date(date);
   const [location, navigate] = useLocation();
   const [isEditing, setIsEditing] = useState(false);
@@ -65,7 +65,10 @@ export default function ChatItem({ title, date, id, onDeleteChat, onModifyChat }
   };
 
   return (
-    <Link className={styles.chatItem} href={`/chats/${id}`}>
+    <Link 
+      className={`${styles.chatItem} ${isActive ? styles.active : ""}`} 
+      href={`/chats/${id}`}
+    >
       <div className={styles.chatData}>
         {isEditing ? (
           <input

@@ -11,7 +11,6 @@ export default function ChatSelected({ chats, onPostChat, onModifyChat }) {
   const [location] = useLocation();
 
   const idChat = location.includes("/chats/") ? parseInt(location.split("/").at(-1)) : null;
-  
   const currentChat = idChat ? chats.find(chat => chat.id === idChat) : null;
   const chatTitle = currentChat?.title || "Nuevo chat";
 

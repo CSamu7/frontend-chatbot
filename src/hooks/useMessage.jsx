@@ -35,7 +35,9 @@ export default function useMessage() {
       if (pendingMessageRef.current && pendingMessageRef.current.chatId === currentChatId) {
         const { text } = pendingMessageRef.current;
         pendingMessageRef.current = null;
-        postMessage(currentChatId, text);
+        setTimeout(() => {
+          postMessage(currentChatId, text);
+        }, 50);
       }
     }
   }, [currentChatId, userId]);
@@ -97,6 +99,7 @@ export default function useMessage() {
   }, [currentChatId, userId]);
 
   const setPendingMessage = useCallback((chatId, text) => {
+    console.log("useMessage.setPendingMessage - chatId:", chatId, "text:", text);
     pendingMessageRef.current = { chatId, text };
   }, []);
 
