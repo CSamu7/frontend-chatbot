@@ -8,45 +8,62 @@ export default function useMessage() {
   
   const userId = localStorage.getItem("id");
   const pendingMessageRef = useRef(null);
+  const lastSavedChatRef = useRef(null); // Para evitar guardados duplicados
 
   const getStorageKey = (chatId) => {
     return userId ? `chat_messages_${userId}_${chatId}` : `chat_messages_${chatId}`;
   };
 
+  // Cargar mensajes cuando cambia el chat
   useEffect(() => {
-    if (currentChatId && userId) {
+    console.log("useMessage - useEffect de carga - currentChatId:", currentChatId, "userId:", userId);
+    
+    if (currentChatId && currentChatId !== "guest" && userId) {
       setIsLoading(true);
       const storageKey = getStorageKey(currentChatId);
       const savedMessages = localStorage.getItem(storageKey);
       
-      let loadedMessages = [];
+      console.log("useMessage - storageKey:", storageKey, "savedMessages:", savedMessages ? "presentes" : "null");
+      
       if (savedMessages) {
         try {
-          loadedMessages = JSON.parse(savedMessages);
-          console.log(`useMessage - Cargando ${loadedMessages.length} mensajes para usuario ${userId}, chat ${currentChatId}`);
+          const loadedMessages = JSON.parse(savedMessages);
+          console.log("useMessage - Cargando", loadedMessages.length, "mensajes");
+          setMessages(loadedMessages);
         } catch (e) {
           console.error("Error parsing saved messages:", e);
+          setMessages([]);
         }
+      } else {
+        console.log("useMessage - Chat VACÍO, limpiando mensajes");
+        setMessages([]);
       }
       
-      setMessages(loadedMessages);
-      setIsLoading(false);
+      // Pequeño retraso para asegurar que el estado se actualice
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 100);
       
       if (pendingMessageRef.current && pendingMessageRef.current.chatId === currentChatId) {
         const { text } = pendingMessageRef.current;
         pendingMessageRef.current = null;
         setTimeout(() => {
           postMessage(currentChatId, text);
-        }, 50);
+        }, 150);
       }
     }
   }, [currentChatId, userId]);
 
+  // Guardar mensajes SOLO cuando no está cargando y el chat es estable
   useEffect(() => {
-    if (currentChatId && userId && messages.length > 0 && !isLoading) {
-      const storageKey = getStorageKey(currentChatId);
-      localStorage.setItem(storageKey, JSON.stringify(messages));
-      console.log(`useMessage - Guardados ${messages.length} mensajes para usuario ${userId}, chat ${currentChatId}`);
+    if (currentChatId && currentChatId !== "guest" && userId && !isLoading) {
+      // Evitar guardar si los mensajes están vacíos y no hay nada que limpiar
+      if (messages.length > 0 || lastSavedChatRef.current === currentChatId) {
+        const storageKey = getStorageKey(currentChatId);
+        localStorage.setItem(storageKey, JSON.stringify(messages));
+        lastSavedChatRef.current = currentChatId;
+        console.log("useMessage - Guardados", messages.length, "mensajes para chat", currentChatId);
+      }
     }
   }, [messages, currentChatId, userId, isLoading]);
 
@@ -59,7 +76,7 @@ export default function useMessage() {
     }
   }, [currentChatId]);
 
-  const postMessage = useCallback(async (idChat, text) => {
+  const postMessage = useCallback(async (idChat, text, botResponseText) => {
     console.log("useMessage.postMessage - idChat:", idChat, "text:", text);
     
     if (!idChat || !text) return;
@@ -88,12 +105,6 @@ export default function useMessage() {
       return response;
     } catch (error) {
       console.error("useMessage.postMessage - ERROR:", error);
-      const errorMessage = {
-        text: "Error: No se pudo enviar el mensaje. Intenta de nuevo.",
-        isUser: false,
-        time: new Date().toLocaleTimeString(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
       throw error;
     }
   }, [currentChatId, userId]);
@@ -104,7 +115,7 @@ export default function useMessage() {
   }, []);
 
   const clearMessages = useCallback(() => {
-    if (currentChatId && userId) {
+    if (currentChatId && currentChatId !== "guest" && userId) {
       const storageKey = getStorageKey(currentChatId);
       localStorage.removeItem(storageKey);
     }
