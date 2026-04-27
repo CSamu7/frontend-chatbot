@@ -6,11 +6,13 @@ import { ErrorContext } from "../context/ErrorContext";
 export default function LoginModal({ closeModal }) {
   const { login } = useUserContext();
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { setError: setGlobalError } = useContext(ErrorContext) || {};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
     
     const formData = new FormData(e.target);
     const email = formData.get("email");
@@ -20,9 +22,11 @@ export default function LoginModal({ closeModal }) {
       await login(email, password);
       closeModal();
     } catch (error) {
-      const errorMsg = error.message || "Error al iniciar sesión";
+      const errorMsg = "Correo o contraseña incorrectos. Revisa tus datos y vuelve a intentar.";
       setError(errorMsg);
       if (setGlobalError) setGlobalError(errorMsg);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,6 +45,7 @@ export default function LoginModal({ closeModal }) {
               type="email"
               name="email"
               required
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -50,11 +55,21 @@ export default function LoginModal({ closeModal }) {
               type="password"
               name="password"
               required
+              disabled={isLoading}
             />
           </div>
           <a href="/signup">¿No estás registrado?</a>
-          {error && <p className={styles.error}>{error}</p>}
-          <input type="submit" value="Iniciar sesión" />
+          {error && (
+            <div className={styles.errorBanner}>
+              <span>⚠️</span>
+              <p>{error}</p>
+            </div>
+          )}
+          <input 
+            type="submit" 
+            value={isLoading ? "Verificando..." : "Iniciar sesión"} 
+            disabled={isLoading}
+          />
         </form>
       </div>
     </div>

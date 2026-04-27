@@ -29,10 +29,8 @@ export default function UserProvider({ children }) {
   }, []);
 
   const registerUser = useCallback(async (userData) => {
-    setIsLoading(true);
     try {
       const response = await userServices.registerUser(userData);
-      
       const loginResponse = await userServices.login(userData.email, userData.password);
       
       localStorage.setItem("id", loginResponse.id);
@@ -42,13 +40,10 @@ export default function UserProvider({ children }) {
       return response;
     } catch (error) {
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   const login = useCallback(async (email, password) => {
-    setIsLoading(true);
     try {
       const response = await userServices.login(email, password);
       localStorage.setItem("id", response.id);
@@ -57,20 +52,16 @@ export default function UserProvider({ children }) {
       return response;
     } catch (error) {
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   const logout = useCallback(async () => {
-    setIsLoading(true);
     try {
       await userServices.logout();
     } finally {
       localStorage.removeItem("id");
       localStorage.removeItem("user");
       setUser(null);
-      setIsLoading(false);
     }
   }, []);
 

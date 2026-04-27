@@ -17,7 +17,6 @@ const userServices = {
 
   login: async (email, password) => {
     const headers = createCsrfHeaders();
-
     const request = await fetch(`${API_URL}/login/`, {
       method: "POST",
       credentials: "include",
@@ -30,12 +29,12 @@ const userServices = {
       throw new Error(error.error || 'Credenciales inválidas');
     }
 
-    return await request.json();
+    const response = await request.json();
+    return response;
   },
 
   registerUser: async (user) => {
     const headers = createCsrfHeaders();
-
     const request = await fetch(`${API_URL}/users/`, {
       method: "POST",
       credentials: "include",
@@ -53,7 +52,8 @@ const userServices = {
       throw new Error(errorMsg);
     }
 
-    return await request.json();
+    const response = await request.json();
+    return response;
   },
 
   logout: async () => {

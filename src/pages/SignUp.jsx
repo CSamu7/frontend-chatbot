@@ -37,7 +37,6 @@ export default function SignUp() {
 
   const handleRegisterUser = async (e) => {
     e.preventDefault();
-    
     setFormError([]);
     setIsLoading(true);
 
@@ -60,7 +59,7 @@ export default function SignUp() {
       await registerUser(user);
       navigate("/");
     } catch (error) {
-      setIsLoading(false);
+      console.error("Error en registro:", error);
       
       let errorMessage = "";
       
@@ -81,6 +80,8 @@ export default function SignUp() {
       }
       
       setError(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,45 +91,22 @@ export default function SignUp() {
       <div className={styles.formContainer}>
         <form ref={form} onSubmit={handleRegisterUser}>
           <h2>Registro</h2>
-          
           <div>
             <label htmlFor="email">Correo electrónico</label>
-            <input
-              type="email"
-              autoComplete="off"
-              name="email"
-              id="email"
-              required
-            />
+            <input type="email" autoComplete="off" name="email" id="email" required disabled={isLoading} />
           </div>
           <div>
             <label htmlFor="username">Nombre de usuario</label>
-            <input 
-              type="text" 
-              name="username" 
-              id="username" 
-              required 
-            />
+            <input type="text" name="username" id="username" required disabled={isLoading} />
           </div>
           <div>
             <label htmlFor="password">Contraseña</label>
-            <input 
-              type="password" 
-              name="password" 
-              id="password" 
-              required 
-            />
+            <input type="password" name="password" id="password" required disabled={isLoading} />
           </div>
           <div>
             <label htmlFor="confirm-password">Confirmar contraseña</label>
-            <input
-              type="password"
-              name="confirm-password"
-              id="confirm-password"
-              required
-            />
+            <input type="password" name="confirm-password" id="confirm-password" required disabled={isLoading} />
           </div>
-          
           {formError.length > 0 && (
             <div className={styles.error}>
               {formError.map((error, index) => (
@@ -136,13 +114,7 @@ export default function SignUp() {
               ))}
             </div>
           )}
-          
-          <input 
-            type="submit" 
-            value={isLoading ? "Registrando..." : "Registrarse"} 
-            disabled={isLoading}
-          />
-          
+          <input type="submit" value={isLoading ? "Registrando..." : "Registrarse"} disabled={isLoading} />
           <p className={styles.loginLink}>
             ¿Ya tienes cuenta? <a href="/">Inicia sesión</a>
           </p>

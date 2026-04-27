@@ -20,7 +20,7 @@ export default function ChatBotPage() {
 
   useEffect(() => {
     setCsrf();
-  }, [setCsrf]);
+  }, []);
 
   return (
     <div className={styles.app}>

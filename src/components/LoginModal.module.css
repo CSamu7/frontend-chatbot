@@ -117,3 +117,40 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
+
+.errorBanner {
+  background-color: #fff0f0;
+  border: 1px solid #ffcccc;
+  border-left: 4px solid #ff4444;
+  color: #cc0000;
+  padding: 12px 14px;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.errorBanner span {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.errorBanner p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
