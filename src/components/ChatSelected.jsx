@@ -6,13 +6,20 @@ import NoChatSelected from "./NoChatSelected";
 import { Route, Switch, useLocation } from "wouter";
 import useMessage from "../hooks/useMessage";
 
-export default function ChatSelected({ chats, onPostChat, onModifyChat }) {
+export default function ChatSelected({ chats, onPostChat, onModifyChat, moveChatToTop }) {
   const { messages, getMessages, postMessage, setPendingMessage } = useMessage();
   const [location] = useLocation();
 
   const idChat = location.includes("/chats/") ? parseInt(location.split("/").at(-1)) : null;
   const currentChat = idChat ? chats.find(chat => chat.id === idChat) : null;
   const chatTitle = currentChat?.title || "Nuevo chat";
+
+  const handlePostMessage = async (idChat, text) => {
+    await postMessage(idChat, text);
+    if (moveChatToTop && idChat) {
+      moveChatToTop(idChat);
+    }
+  };
 
   useEffect(() => {
     console.log("ChatSelected montado - chats:", chats.length);
@@ -35,7 +42,7 @@ export default function ChatSelected({ chats, onPostChat, onModifyChat }) {
                 idChat={parseInt(params.id)}
                 messages={messages}
                 onMessages={getMessages}
-                onPostMessage={postMessage}
+                onPostMessage={handlePostMessage}
               />
             )}
           </Route>
@@ -43,7 +50,7 @@ export default function ChatSelected({ chats, onPostChat, onModifyChat }) {
       </div>
       <div className={styles.inputContainer}>
         <InputMessage
-          onPostMessage={postMessage}
+          onPostMessage={handlePostMessage}
           onPostChat={onPostChat}
           onModifyChat={onModifyChat}
           messages={messages}

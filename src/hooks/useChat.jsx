@@ -1,4 +1,3 @@
-// src/hooks/useChat.js
 import { useEffect, useState, useCallback, useRef } from "react";
 import { chatsService } from "../services/chatServices";
 
@@ -12,7 +11,9 @@ export default function useChat(user) {
       const response = await chatsService.getChats(user.id);
       const chatsList = response.results || response;
       
-      const sortedChats = [...chatsList].sort((a, b) => {
+      const filteredChats = chatsList.filter(chat => !chat.title?.startsWith('[INVITADO]'));
+      
+      const sortedChats = [...filteredChats].sort((a, b) => {
         const dateA = new Date(a.created_at);
         const dateB = new Date(b.created_at);
         return dateB - dateA;
@@ -62,15 +63,16 @@ export default function useChat(user) {
 
   const postChat = useCallback(async (title) => {
     const id_user = user?.id || localStorage.getItem("id");
-    if (!id_user) {
-      throw new Error("Debes iniciar sesión para crear un chat.");
-    }
+    if (!id_user) throw new Error("Usuario no autenticado");
     
     await chatsService.postChat(id_user, title);
     
     const response = await chatsService.getChats(id_user);
     const chatsList = response.results || response;
-    const sortedChats = [...chatsList].sort((a, b) => {
+    
+    const filteredChats = chatsList.filter(chat => !chat.title?.startsWith('[INVITADO]'));
+    
+    const sortedChats = [...filteredChats].sort((a, b) => {
       const dateA = new Date(a.created_at);
       const dateB = new Date(b.created_at);
       return dateB - dateA;
@@ -85,12 +87,23 @@ export default function useChat(user) {
     return chats.find(chat => chat.id === id);
   }, [chats]);
 
+  const moveChatToTop = useCallback((chatId) => {
+    setChats(prev => {
+      const chat = prev.find(c => c.id === chatId);
+      if (!chat) return prev;
+      
+      const others = prev.filter(c => c.id !== chatId);
+      return [chat, ...others];
+    });
+  }, []);
+
   return { 
     chats, 
     deleteChat, 
     postChat, 
     modifyChat, 
     refreshChats: fetchChats,
-    getChatById
+    getChatById,
+    moveChatToTop
   };
 }

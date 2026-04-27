@@ -16,11 +16,11 @@ export default function ChatBotPage() {
   const { user, logout } = useUserContext();
   const { setCsrf } = useAuth();
   const [error, setError] = useContext(ErrorContext);
-  const { chats, deleteChat, postChat, modifyChat } = useChat(user);
+  const { chats, deleteChat, postChat, modifyChat, moveChatToTop } = useChat(user);
 
   useEffect(() => {
     setCsrf();
-  }, []);
+  }, [setCsrf]);
 
   return (
     <div className={styles.app}>
@@ -42,6 +42,7 @@ export default function ChatBotPage() {
         chats={chats}
         onPostChat={postChat}
         onModifyChat={modifyChat}
+        moveChatToTop={moveChatToTop}
       />
       {isLoginModalActive && (
         <LoginModal closeModal={() => setIsLoginModalActive(false)} />
